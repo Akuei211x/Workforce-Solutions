@@ -1,0 +1,4296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wasl - Dashboard</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+
+  <style>
+    :root{
+      --brand:#0066cc;
+      --brand-dark:#0b1f3b;
+      --brand-soft:#eaf4ff;
+      --ink:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --surface:#f8fafc;
+      --white:#fff;
+      --success:#15803d;
+      --success-bg:#ecfdf3;
+      --warning:#b45309;
+      --warning-bg:#fff7ed;
+      --danger:#dc2626;
+      --danger-bg:#fef2f2;
+      --shadow:0 12px 35px rgba(15,23,42,.08);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      min-height:100vh;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      color:var(--ink);
+      background:var(--surface);
+    }
+
+    button,input,select,textarea{font:inherit}
+
+    button{cursor:pointer}
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .app{
+      min-height:100vh;
+      display:flex;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position:fixed;
+      inset:0 auto 0 0;
+      z-index:100;
+      width:260px;
+      display:flex;
+      flex-direction:column;
+      padding:28px 18px 20px;
+      color:#fff;
+      background:linear-gradient(160deg,var(--brand),var(--brand-dark));
+      box-shadow:8px 0 30px rgba(11,31,59,.12);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:4px 10px 28px;
+    }
+
+    .brand img{
+      width:150px;
+      max-width:100%;
+      height:auto;
+      object-fit:contain;
+    }
+
+    .nav{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      flex:1;
+    }
+
+    .nav-link{
+      width:100%;
+      border:0;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-height:46px;
+      padding:0 13px;
+      border-radius:12px;
+      color:rgba(255,255,255,.78);
+      background:transparent;
+      text-align:left;
+      transition:background .2s ease,color .2s ease,transform .2s ease;
+    }
+
+    .nav-link:hover{
+      color:#fff;
+      background:rgba(255,255,255,.10);
+      transform:translateX(2px);
+    }
+
+    .nav-link.active{
+      color:#fff;
+      background:rgba(255,255,255,.16);
+      box-shadow:inset 3px 0 rgba(255,255,255,.9);
+    }
+
+    .nav-link:focus-visible,
+    .action:focus-visible,
+    .card-link:focus-visible{
+      outline:2px solid rgba(255,255,255,.9);
+      outline-offset:2px;
+    }
+
+    .nav-icon{
+  width:22px;
+  height:22px;
+  flex:0 0 22px;
+  display:grid;
+  place-items:center;
+}
+
+.nav-icon img{
+  width:20px;
+  height:20px;
+  object-fit:contain;
+  display:block;
+}
+
+    .sidebar-footer{
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.13);
+    }
+
+    .logout-btn{
+      width:100%;
+      border:0;
+      background:transparent;
+      color:rgba(255,255,255,.78);
+      text-align:left;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 13px;
+      border-radius:12px;
+    }
+
+    .logout-btn:hover{
+      color:#fff;
+      background:rgba(255,255,255,.10);
+    }
+
+    /* Main */
+    .main{
+      width:calc(100% - 260px);
+      margin-left:260px;
+      min-height:100vh;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 34px;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--line);
+    }
+
+    .menu-btn{
+      display:none;
+      width:42px;
+      height:42px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:#fff;
+      color:var(--ink);
+    }
+
+    .topbar-title{
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .user-menu{
+      display:flex;
+      align-items:center;
+      gap:11px;
+    }
+
+    .avatar{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      color:#fff;
+      font-weight:700;
+      background:linear-gradient(135deg,var(--brand),#27a3ff);
+    }
+
+    .avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:none;
+    }
+
+    .user-meta{
+      display:flex;
+      flex-direction:column;
+      line-height:1.25;
+    }
+
+    .user-name{
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .user-role{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .content{
+      width:100%;
+      max-width:1400px;
+      margin:0 auto;
+      padding:34px;
+    }
+
+    /* Hero */
+    .hero{
+      display:flex;
+      justify-content:space-between;
+      gap:25px;
+      align-items:flex-end;
+      margin-bottom:28px;
+    }
+
+    .hero h1{
+      font-size:clamp(28px,4vw,38px);
+      line-height:1.12;
+      letter-spacing:-.7px;
+      margin-bottom:8px;
+    }
+
+    .hero p{
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 13px;
+      border-radius:999px;
+      background:var(--success-bg);
+      color:var(--success);
+      font-size:13px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .status-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:currentColor;
+    }
+
+    /* Stats */
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+      margin-bottom:26px;
+    }
+
+    .stat-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:21px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:17px;
+    }
+
+    .stat-label{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .stat-icon{
+      width:38px;
+      height:38px;
+      border-radius:11px;
+      display:grid;
+      place-items:center;
+      color:var(--brand);
+      background:var(--brand-soft);
+      font-size:17px;
+    }
+
+    .stat-value{
+      font-size:29px;
+      font-weight:800;
+      letter-spacing:-.5px;
+    }
+
+    .stat-note{
+      margin-top:5px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    /* Grid */
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.5fr) minmax(320px,.85fr);
+      gap:22px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .card-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      padding:20px 21px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .card-title{
+      font-size:16px;
+      font-weight:800;
+    }
+
+    .card-link{
+      color:var(--brand);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .card-body{
+      padding:21px;
+    }
+
+    /* Profile */
+    .profile-summary{
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+    }
+
+    .profile-avatar{
+      flex:0 0 76px;
+      width:76px;
+      height:76px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      color:#fff;
+      font-size:24px;
+      font-weight:800;
+      background:linear-gradient(135deg,var(--brand),#27a3ff);
+    }
+
+    .profile-avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:none;
+    }
+
+    .profile-info h3{
+      font-size:20px;
+      margin-bottom:4px;
+    }
+
+    .profession{
+      color:var(--brand);
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:13px;
+    }
+
+    .profile-details{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px 22px;
+      margin-top:17px;
+      padding-top:17px;
+      border-top:1px solid var(--line);
+    }
+
+    .detail-label{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      margin-bottom:4px;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+    }
+
+    .detail-value{
+      font-size:14px;
+      font-weight:600;
+    }
+
+    .profile-progress{
+      margin-top:20px;
+    }
+
+    .progress-header{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .progress-track{
+      width:100%;
+      height:8px;
+      overflow:hidden;
+      border-radius:99px;
+      background:#e9eef5;
+    }
+
+    .progress-bar{
+      height:100%;
+      width:0;
+      border-radius:inherit;
+      background:linear-gradient(90deg,var(--brand),#28a8ff);
+      transition:width .8s ease;
+    }
+
+    /* Quick actions */
+    .actions{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .action{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      min-height:105px;
+      padding:15px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+    }
+
+    .action:hover{
+      transform:translateY(-2px);
+      border-color:#b8d9f7;
+      box-shadow:0 8px 22px rgba(15,23,42,.07);
+    }
+
+    .action-icon{
+      width:35px;
+      height:35px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      color:var(--brand);
+      background:var(--brand-soft);
+    }
+
+    .action strong{
+      font-size:13px;
+    }
+
+    .action span{
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    /* Applications */
+    .applications{
+      grid-column:1 / -1;
+    }
+
+    .application-row{
+      display:grid;
+      grid-template-columns:minmax(180px,1.5fr) minmax(120px,1fr) 110px 100px;
+      gap:15px;
+      align-items:center;
+      padding:16px 21px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .application-row:last-child{border-bottom:0}
+
+    .job-title{
+      font-size:14px;
+      font-weight:750;
+    }
+
+    .job-company,.job-meta{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:max-content;
+      min-width:78px;
+      padding:6px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:750;
+    }
+
+    .badge.pending{
+      color:var(--warning);
+      background:var(--warning-bg);
+    }
+
+    .badge.approved{
+      color:var(--success);
+      background:var(--success-bg);
+    }
+
+    .badge.rejected{
+      color:var(--danger);
+      background:var(--danger-bg);
+    }
+
+    .empty{
+      padding:35px 20px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+
+    /* Single-page dashboard sections */
+    .page-section{display:none}
+    .page-section.active{display:block}
+
+    .section-heading{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:20px;
+      margin-bottom:25px;
+    }
+
+    .section-heading h1{
+      font-size:clamp(28px,4vw,38px);
+      line-height:1.12;
+      letter-spacing:-.7px;
+      margin-bottom:8px;
+    }
+
+    .section-heading p{color:var(--muted);font-size:15px}
+
+    .primary-btn,
+    .danger-btn{
+      border:0;
+      border-radius:11px;
+      padding:11px 17px;
+      color:#fff;
+      font-weight:750;
+      background:var(--brand);
+      box-shadow:0 7px 18px rgba(0,102,204,.18);
+    }
+
+    .primary-btn:hover{filter:brightness(.95)}
+    .danger-btn{background:var(--danger);box-shadow:none;margin-top:18px}
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+      margin-top:25px;
+    }
+
+    .form-grid label{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      color:#374151;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .form-grid .full{grid-column:1 / -1}
+
+    .form-grid input,
+    .form-grid select,
+    .form-grid textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:11px;
+      padding:12px 13px;
+      color:var(--ink);
+      background:#fff;
+      outline:none;
+      resize:vertical;
+      transition:border-color .2s,box-shadow .2s;
+    }
+
+    .form-grid input:focus,
+    .form-grid select:focus,
+    .form-grid textarea:focus{
+      border-color:#7bbcf0;
+      box-shadow:0 0 0 3px rgba(0,102,204,.08);
+    }
+
+    .profile-edit-head{
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+
+    .profile-avatar.large{width:88px;height:88px;border-radius:20px}
+
+    .muted{color:var(--muted);font-size:14px;line-height:1.6}
+
+    .profession-hero{
+      display:flex;
+      align-items:flex-start;
+      gap:18px;
+    }
+
+    .profession-icon{
+      flex:0 0 58px;
+      width:58px;
+      height:58px;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      color:var(--brand);
+      background:var(--brand-soft);
+      font-size:24px;
+    }
+
+    .profession-hero h2{font-size:24px;margin:5px 0 7px}
+
+    .eyebrow{
+      color:var(--brand);
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.8px;
+    }
+
+    .profession-details{margin-top:25px}
+
+    .notice{
+      margin-top:25px;
+      padding:17px;
+      border:1px solid #dbeafe;
+      border-radius:13px;
+      background:#f7fbff;
+    }
+
+    .notice strong{display:block;margin-bottom:6px}
+    .notice p{color:var(--muted);font-size:13px;line-height:1.6}
+
+    .empty-icon{
+      width:48px;
+      height:48px;
+      display:grid;
+      place-items:center;
+      margin:0 auto 12px;
+      border-radius:14px;
+      color:var(--brand);
+      background:var(--brand-soft);
+      font-size:20px;
+    }
+
+    .empty strong{display:block;color:var(--ink);margin-bottom:7px}
+
+    .settings-list{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:15px;
+      margin-bottom:20px;
+    }
+
+    .setting-card{
+      padding:19px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:#fff;
+      box-shadow:var(--shadow);
+    }
+
+    .setting-card div{display:flex;flex-direction:column;gap:6px}
+    .setting-card strong{font-size:14px}
+    .setting-card span{font-size:13px;color:var(--muted)}
+
+    .danger-card{border-color:#fecaca}
+    .danger-card h2{font-size:17px;margin-bottom:5px}
+
+    .page-jump,
+    .card-link{
+      cursor:pointer;
+      border:0;
+      background:transparent;
+    }
+
+    /* Loading / messages */
+    .loading{
+      padding:50px 20px;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    .spinner{
+      width:28px;
+      height:28px;
+      margin:0 auto 12px;
+      border:3px solid #dbeafe;
+      border-top-color:var(--brand);
+      border-radius:50%;
+      animation:spin .75s linear infinite;
+    }
+
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .toast{
+      position:fixed;
+      right:25px;
+      bottom:25px;
+      z-index:500;
+      max-width:360px;
+      padding:14px 17px;
+      border-radius:13px;
+      color:#fff;
+      background:var(--brand-dark);
+      box-shadow:0 15px 35px rgba(0,0,0,.2);
+      opacity:0;
+      transform:translateY(15px);
+      pointer-events:none;
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    /* Mobile overlay */
+    .overlay{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:90;
+      background:rgba(15,23,42,.45);
+      backdrop-filter:blur(2px);
+    }
+
+    /* Responsive */
+    /* Responsive */
+@media(max-width:1100px){
+  .stats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+
+  .applications{
+    grid-column:auto;
+  }
+}
+
+@media(max-width:800px){
+
+  /* Mobile sidebar */
+  .sidebar{
+    width:260px;
+    max-width:82vw;
+    transform:translateX(-105%);
+    transition:transform .25s ease;
+    padding:22px 14px 18px;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .overlay.show{
+    display:block;
+  }
+
+  /* Main content uses the entire screen */
+  .main{
+    width:100%;
+    margin-left:0;
+  }
+
+  /* Mobile top bar */
+  .topbar{
+    height:68px;
+    padding:0 15px;
+  }
+
+  .menu-btn{
+    display:grid;
+    place-items:center;
+    width:40px;
+    height:40px;
+    flex-shrink:0;
+  }
+
+  .topbar-title{
+    display:none;
+  }
+
+  /* Content */
+  .content{
+    width:100%;
+    padding:22px 16px 40px;
+  }
+
+  .hero{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  /* Applications become cards instead of a wide table */
+  .application-row{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .application-row > div:nth-child(2),
+  .application-row > div:nth-child(4){
+    text-align:left;
+  }
+}
+
+@media(max-width:560px){
+
+  .sidebar{
+    width:245px;
+    max-width:84vw;
+  }
+
+  .brand{
+    padding:2px 8px 22px;
+  }
+
+  .brand img{
+    width:135px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .section-heading{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid .full{
+    grid-column:auto;
+  }
+
+  .settings-list{
+    grid-template-columns:1fr;
+  }
+
+  .profile-summary{
+    flex-direction:column;
+  }
+
+  .profile-details{
+    grid-template-columns:1fr;
+  }
+
+  .actions{
+    grid-template-columns:1fr;
+  }
+
+  .user-meta{
+    display:none;
+  }
+
+  .content{
+    padding:20px 13px 32px;
+  }
+
+  .hero h1{
+    font-size:29px;
+  }
+
+  .card-header,
+  .card-body{
+    padding:16px;
+  }
+
+  .application-row{
+    padding:15px 16px;
+  }
+}
+/* =========================================================
+   DASHBOARD - RELATED JOBS
+   ========================================================= */
+
+   .dashboard-jobs-card {
+    margin-top: 24px;
+}
+
+.dashboard-jobs-card .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.dashboard-jobs-card .card-header h2 {
+    margin: 0;
+}
+
+.dashboard-jobs-card .card-header p {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   JOB SEARCH
+   ========================================================= */
+
+.dashboard-job-search {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    width: 100%;
+    max-width: 650px;
+    height: 60px;
+
+    margin-top: 20px;
+    padding: 5px;
+
+    background-color: #fff;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+
+    box-sizing: border-box;
+    padding-left: 10px;
+}
+
+.dashboard-job-search input {
+    flex: 1;
+
+    width: 100%;
+    min-width: 0;
+    height: 50px;
+
+    outline: none;
+    border: none;
+
+    background: transparent;
+
+    padding: 0 20px;
+
+    color: #7a7a7a;
+    font-family: inherit;
+    font-size: 14px;
+
+    box-sizing: border-box;
+}
+
+.dashboard-job-search input::placeholder {
+    color: #7a7a7a;
+}
+
+.dashboard-job-search-btn {
+    flex: 0 0 auto;
+
+    height: 50px;
+    line-height: 50px;
+
+    padding: 0 30px;
+
+    border: none;
+    border-radius: 25px;
+
+    background-color: #0b1f3b;
+    color: #fff;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition: all .3s;
+}
+
+.dashboard-job-search-btn:hover {
+    background-color: #16345f;
+    color: #fff;
+}
+
+
+/* =========================================================
+   VIEW ALL JOBS BUTTON
+   ========================================================= */
+
+.dashboard-job-btn {
+    display: inline-block;
+
+    height: 50px;
+    line-height: 50px;
+
+    padding: 0 30px;
+
+    border: none;
+    border-radius: 25px;
+
+    background-color: #0b1f3b;
+    color: #fff;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition: all .3s;
+}
+
+.dashboard-job-btn:hover {
+    background-color: #16345f;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.dashboard-view-all-btn {
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   RELATED JOBS
+   ========================================================= */
+
+.dashboard-related-jobs {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.dashboard-related-job {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    padding: 16px;
+
+    border: 1px solid var(--line);
+    border-radius: 14px;
+
+    background: #fff;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease;
+}
+
+.dashboard-related-job:hover {
+    border-color: #b8d9f7;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, .07);
+    transform: translateY(-1px);
+}
+
+.dashboard-related-job-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.dashboard-related-job-title {
+    margin: 0 0 7px;
+
+    color: var(--ink);
+
+    font-size: 15px;
+    font-weight: 700;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dashboard-related-job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.dashboard-related-job-meta span {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 4px 9px;
+
+    border-radius: 999px;
+
+    background: var(--surface);
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.dashboard-related-job-description {
+    margin: 8px 0 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    line-height: 1.5;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* Individual job button */
+
+.dashboard-related-job .dashboard-job-btn {
+    flex-shrink: 0;
+
+    height: 42px;
+    line-height: 42px;
+
+    padding: 0 22px;
+
+    font-size: 13px;
+}
+
+
+/* Empty state */
+
+.dashboard-jobs-empty,
+.jobs-loading {
+    padding: 28px 20px;
+
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+
+    text-align: center;
+
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.dashboard-jobs-empty strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--ink);
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .dashboard-jobs-card .card-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .dashboard-view-all-btn {
+        width: 100%;
+    }
+
+    .dashboard-job-search {
+        max-width: 100%;
+    }
+
+    .dashboard-related-job {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .dashboard-related-job .dashboard-job-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 560px) {
+
+    .dashboard-job-search {
+        height: auto;
+        min-height: 60px;
+    }
+
+    .dashboard-job-search input {
+        padding: 0 15px;
+    }
+
+    .dashboard-job-search-btn {
+        padding: 0 20px;
+        font-size: 12px;
+    }
+}
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <a href="/index.html" aria-label="Wasl home">
+          <img src="/assets/images/wasl-2.webp" alt="Wasl">
+        </a>
+      </div>
+
+      <nav class="nav" aria-label="Worker navigation">
+        <button class="nav-link active" type="button" data-section="dashboard">
+          <span class="nav-icon">
+            <img src="/worker/assets/images/dashboard.png" alt="">
+          </span>
+          <span>Dashboard</span>
+        </button>
+
+        <button class="nav-link" type="button" data-section="profile">
+          <span class="nav-icon">
+            <img src="/worker/assets/images/profile.png" alt="">
+          </span>
+          <span>My Profile</span>
+        </button>
+
+        <button class="nav-link" type="button" data-section="profession">
+          <span class="nav-icon">
+            <img src="/worker/assets/images/profession-2.png" alt="">
+          </span>
+          <span>My Profession</span>
+        </button>
+
+        <button class="nav-link" type="button" data-section="applications">
+          <span class="nav-icon">
+            <img src="/worker/assets/images/applications.png" alt="">
+          </span>
+          <span>Applications</span>
+        </button>
+
+        <button class="nav-link" type="button" data-section="jobs">
+          <span class="nav-icon">
+            <img src="/worker/assets/images/jobs.png" alt="">
+          </span>
+          <span>Jobs</span>
+        </button>
+
+        <button class="nav-link" type="button" data-section="messages">
+          <span class="nav-icon">
+            <img src="/worker/assets/images/messages.png" alt="">
+          </span>
+          <span>Messages</span>
+        </button>
+
+        <button class="nav-link" type="button" data-section="settings">
+          <span class="nav-icon">
+            <img src="/worker/assets/images/settings.png" alt="">
+          </span>
+          <span>Settings</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="logoutBtn" type="button">
+          <span class="nav-icon">↪</span>
+          <span>Sign out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu">
+          ☰
+        </button>
+
+        <div class="topbar-title" id="pageTitle">Worker Portal</div>
+
+        <div class="user-menu">
+          <div class="avatar" id="topAvatar">
+            <span id="topInitials">W</span>
+            <img id="topAvatarImage" alt="Worker profile">
+          </div>
+
+          <div class="user-meta">
+            <span class="user-name" id="topUserName">Loading...</span>
+            <span class="user-role">Worker</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+
+        <!-- DASHBOARD -->
+        <div class="page-section active" data-page="dashboard">
+          <div class="hero">
+            <div>
+              <h1 id="welcomeTitle">Welcome back 👋</h1>
+              <p>Here is an overview of your Wasl profile and activity.</p>
+            </div>
+            <div class="status-pill" id="availabilityPill">
+              <span class="status-dot"></span>
+              <span id="availabilityText">Loading...</span>
+            </div>
+          </div>
+
+          <section class="stats" aria-label="Dashboard statistics">
+            <article class="stat-card">
+              <div class="stat-top"><span class="stat-label">Profile completion</span><span class="stat-icon">◔</span></div>
+              <div class="stat-value" id="profileCompletion">0%</div>
+              <div class="stat-note">Complete your profile to improve visibility</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span class="stat-label">Applications</span><span class="stat-icon">✓</span></div>
+              <div class="stat-value" id="applicationCount">0</div>
+              <div class="stat-note">Total applications submitted</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span class="stat-label">Available jobs</span><span class="stat-icon">⌕</span></div>
+              <div class="stat-value" id="jobCount">0</div>
+              <div class="stat-note">Matching jobs available</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span class="stat-label">Verification</span><span class="stat-icon">✓</span></div>
+              <div class="stat-value" id="verificationStatus">—</div>
+              <div class="stat-note">Current account verification</div>
+            </article>
+          </section>
+
+          <!-- Jobs For You -->
+<div class="card dashboard-jobs-card">
+
+  <div class="card-header">
+      <div>
+          <h2>Jobs For You</h2>
+          <p id="dashboardJobsSubtitle">
+              Jobs matching your profession
+          </p>
+      </div>
+
+      <button
+          type="button"
+          class="card-link page-jump"
+          onclick="openSection('jobs')"
+      >
+          View All Jobs
+      </button>
+  </div>
+
+  <!-- Search -->
+  <form id="dashboardJobSearchForm" class="dashboard-job-search">
+    <input
+        type="text"
+        id="dashboardJobSearch"
+        name="searchKeyword"
+        placeholder="Type Job Title, Skill, or Service..."
+        autocomplete="off"
+    >
+
+    <button type="submit" class="dashboard-job-search-btn">
+        Search Now
+    </button>
+</form>
+
+  <!-- Jobs related to user's profession -->
+  <div
+      id="dashboardRelatedJobs"
+      class="dashboard-related-jobs"
+  >
+      <div class="jobs-loading">
+          Loading jobs...
+      </div>
+  </div>
+
+</div>
+
+          <div class="dashboard-grid">
+            <section class="card">
+              <div class="card-header">
+                <h2 class="card-title">My Professional Profile</h2>
+                <button class="card-link page-jump" type="button" data-section="profile">Edit profile</button>
+              </div>
+              <div class="card-body">
+                <div class="profile-summary">
+                  <div class="profile-avatar" id="profileAvatar">
+                    <span id="profileInitials">W</span>
+                    <img id="profileAvatarImage" alt="Worker profile">
+                  </div>
+                  <div class="profile-info">
+                    <h3 id="profileName">Loading...</h3>
+                    <div class="profession" id="profileProfession">Profession not set</div>
+                    <p class="job-meta" id="profileBio">Your professional summary will appear here.</p>
+                  </div>
+                </div>
+                <div class="profile-details">
+                  <div><span class="detail-label">Worker number</span><span class="detail-value" id="workerNumber">—</span></div>
+                  <div><span class="detail-label">Experience</span><span class="detail-value" id="experience">—</span></div>
+                  <div><span class="detail-label">Location</span><span class="detail-value" id="location">—</span></div>
+                  <div><span class="detail-label">Preferred rate</span><span class="detail-value" id="preferredRate">—</span></div>
+                </div>
+                <div class="profile-progress">
+                  <div class="progress-header"><span>Profile completion</span><span id="profileProgressText">0%</span></div>
+                  <div class="progress-track"><div class="progress-bar" id="profileProgressBar"></div></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-header"><h2 class="card-title">Quick Actions</h2></div>
+              <div class="card-body">
+                <div class="actions">
+                  <button class="action page-jump" type="button" data-section="profile"><span class="action-icon">◉</span><strong>Update profile</strong><span>Keep your professional information current.</span></button>
+                  <button class="action page-jump" type="button" data-section="jobs"><span class="action-icon">⌕</span><strong>Find jobs</strong><span>Explore opportunities matching your skills.</span></button>
+                  <button class="action page-jump" type="button" data-section="applications"><span class="action-icon">✓</span><strong>My applications</strong><span>Track applications and their status.</span></button>
+                  <button class="action page-jump" type="button" data-section="settings"><span class="action-icon">⚙</span><strong>Account settings</strong><span>Manage your account preferences.</span></button>
+                </div>
+              </div>
+            </section>
+
+            <section class="card applications">
+              <div class="card-header">
+                <h2 class="card-title">Recent Applications</h2>
+                <button class="card-link page-jump" type="button" data-section="applications">View all</button>
+              </div>
+              <div id="applicationsList"><div class="empty">Your recent applications will appear here.</div></div>
+            </section>
+          </div>
+        </div>
+
+        <!-- PROFILE -->
+        <div class="page-section" data-page="profile">
+          <div class="section-heading">
+            <div><h1>My Profile</h1><p>Manage the personal information employers see about you.</p></div>
+            <button class="primary-btn" id="saveProfileBtn" type="button">Save changes</button>
+          </div>
+
+          <section class="card">
+            <div class="card-body">
+              <div class="profile-edit-head">
+                <div class="profile-avatar large" id="editAvatar">
+                  <span id="editInitials">W</span><img id="editAvatarImage" alt="Worker profile">
+                </div>
+                <div>
+                  <h2 id="editProfileName">Worker</h2>
+                  <p class="muted">Your profile is linked to your authenticated Wasl account.</p>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <label>First name<input id="firstNameInput" type="text" autocomplete="given-name"></label>
+                <label>Last name<input id="lastNameInput" type="text" autocomplete="family-name"></label>
+                <label>Phone<input id="phoneInput" type="tel" autocomplete="tel"></label>
+                <label>Primary location<input id="locationInput" type="text" placeholder="e.g. Juba"></label>
+                <label>Years of experience<input id="experienceInput" type="number" min="0" step="1"></label>
+                <label>Preferred rate<input id="rateInput" type="number" min="0" step="0.01"></label>
+                <label>Currency<input id="currencyInput" type="text" placeholder="e.g. USD"></label>
+                <label>Availability
+                  <select id="availabilityInput">
+                    <option value="available">Available</option>
+                    <option value="unavailable">Unavailable</option>
+                    <option value="busy">Busy</option>
+                  </select>
+                </label>
+                <label class="full">Professional bio<textarea id="bioInput" rows="6" placeholder="Tell employers about your experience, skills and strengths."></textarea></label>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- PROFESSION -->
+        <div class="page-section" data-page="profession">
+          <div class="section-heading">
+            <div><h1>My Profession</h1><p>Review the profession connected to your worker profile.</p></div>
+          </div>
+
+          <section class="card">
+            <div class="card-body">
+              <div class="profession-hero">
+                <div class="profession-icon">▣</div>
+                <div>
+                  <div class="eyebrow">Current profession</div>
+                  <h2 id="professionPageName">Profession not set</h2>
+                  <p id="professionPageDescription" class="muted">Your profession description will appear here.</p>
+                </div>
+              </div>
+
+              <div class="profile-details profession-details">
+                <div><span class="detail-label">Category</span><span class="detail-value" id="professionCategory">—</span></div>
+                <div><span class="detail-label">Experience</span><span class="detail-value" id="professionExperience">—</span></div>
+                <div><span class="detail-label">Location</span><span class="detail-value" id="professionLocation">—</span></div>
+                <div><span class="detail-label">Verification</span><span class="detail-value" id="professionVerification">—</span></div>
+              </div>
+
+              <div class="notice">
+                <strong>Need to change your profession?</strong>
+                <p>Profession changes can affect job matching. Use the profile tools or contact your workforce administrator if the profession assigned to your account is incorrect.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- APPLICATIONS -->
+        <div class="page-section" data-page="applications">
+          <div class="section-heading">
+            <div><h1>Applications</h1><p>Track the jobs you have applied for.</p></div>
+          </div>
+          <section class="card">
+            <div class="card-header"><h2 class="card-title">My Applications</h2></div>
+            <div id="applicationsPageList"><div class="empty">No application records are connected yet.</div></div>
+          </section>
+        </div>
+
+        <!-- JOBS -->
+<div class="page-section" data-page="jobs">
+  <div class="section-heading">
+    <div>
+      <h1>Jobs</h1>
+      <p>Explore opportunities matching your profession, skills and location.</p>
+    </div>
+  </div>
+
+  <section class="card dashboard-jobs-card">
+
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">Available Opportunities</h2>
+        <p id="jobsPageSubtitle">
+          Jobs matching your profession
+        </p>
+      </div>
+    </div>
+
+    <form id="jobsPageSearchForm" class="dashboard-job-search">
+      <input
+        type="text"
+        id="jobsPageSearch"
+        name="searchKeyword"
+        placeholder="Search jobs by title, skill, service or location..."
+        autocomplete="off"
+      >
+
+      <button
+        type="submit"
+        class="dashboard-job-search-btn"
+      >
+        Search Now
+      </button>
+    </form>
+
+    <div
+      id="jobsPageList"
+      class="dashboard-related-jobs"
+    >
+      <div class="jobs-loading">
+        Loading jobs...
+      </div>
+    </div>
+
+  </section>
+</div>
+
+        <!-- MESSAGES -->
+        <div class="page-section" data-page="messages">
+          <div class="section-heading">
+            <div><h1>Messages</h1><p>Keep your workforce conversations in one place.</p></div>
+          </div>
+          <section class="card">
+            <div class="empty">
+              <div class="empty-icon">✉</div>
+              <strong>No messages yet.</strong>
+              <p>Employer and workforce communications can appear here once messaging is connected.</p>
+            </div>
+          </section>
+        </div>
+
+        <!-- SETTINGS -->
+        <div class="page-section" data-page="settings">
+          <div class="section-heading">
+            <div><h1>Settings</h1><p>Manage your worker account and dashboard preferences.</p></div>
+          </div>
+
+          <section class="settings-list">
+            <div class="setting-card">
+              <div><strong>Account status</strong><span id="settingsAccountStatus">Loading...</span></div>
+            </div>
+            <div class="setting-card">
+              <div><strong>Login email</strong><span id="settingsEmail">Loading...</span></div>
+            </div>
+            <div class="setting-card">
+              <div><strong>Availability</strong><span id="settingsAvailability">Loading...</span></div>
+            </div>
+            <div class="setting-card">
+              <div><strong>Verification</strong><span id="settingsVerification">Loading...</span></div>
+            </div>
+          </section>
+
+          <section class="card danger-card">
+            <div class="card-body">
+              <h2>Sign out</h2>
+              <p class="muted">End your current Wasl session on this device.</p>
+              <button class="danger-btn" id="settingsLogoutBtn" type="button">Sign out</button>
+            </div>
+          </section>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/assets/js/gsap-public/minified/gsap.min.js"></script>
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://hhpyomxwaexviyxwcojr.supabase.co";
+  
+    const SUPABASE_ANON_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhocHlvbXh3YWV4dml5eHdjb2pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNzM2MzcsImV4cCI6MjEwNTg0OTYzN30.rZ890-_6SQTocIvz-VBNericambE-PHvYSzCNfXb0uQ";
+  
+    const db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+  
+    const prefersReducedMotion =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  
+    let currentUser = null;
+    let workerProfile = null;
+    let workerProfession = null;
+  
+    /*
+     * All jobs loaded from Supabase.
+     */
+    let allJobs = [];
+  
+    /*
+     * Jobs that match the worker.
+     */
+    let matchingJobs = [];
+  
+    const $ = id => document.getElementById(id);
+  
+  
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+  
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  
+  
+    function initials(firstName, lastName, fallback = "W") {
+  
+      const first = String(firstName || "").trim();
+      const last = String(lastName || "").trim();
+  
+      if (!first && !last) return fallback;
+  
+      return (
+        (first.charAt(0) + last.charAt(0))
+          .toUpperCase()
+          .slice(0, 2)
+      );
+    }
+  
+  
+    function normalize(value) {
+  
+      return String(value ?? "")
+        .trim()
+        .toLowerCase();
+  
+    }
+  
+  
+    function formatStatus(status) {
+  
+      if (!status) return "Not set";
+  
+      return String(status)
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
+  
+    }
+  
+  
+    function showToast(message) {
+  
+      const toast = $("toast");
+  
+      if (!toast) return;
+  
+      toast.textContent = message;
+  
+      toast.classList.add("show");
+  
+      window.clearTimeout(showToast.timer);
+  
+      showToast.timer = window.setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3500);
+  
+    }
+  
+  
+    function setAvatar(
+      imageElementId,
+      initialsElementId,
+      url,
+      text
+    ) {
+  
+      const image = $(imageElementId);
+      const initialsElement = $(initialsElementId);
+  
+      if (!image || !initialsElement) return;
+  
+      initialsElement.textContent = text || "W";
+  
+      if (url) {
+  
+        image.src = url;
+  
+        image.style.display = "block";
+        initialsElement.style.display = "none";
+  
+        image.onerror = () => {
+  
+          image.style.display = "none";
+          initialsElement.style.display = "block";
+  
+        };
+  
+      } else {
+  
+        image.removeAttribute("src");
+  
+        image.style.display = "none";
+        initialsElement.style.display = "block";
+  
+      }
+  
+    }
+  
+  
+    function calculateProfileCompletion(profile, worker) {
+  
+      const fields = [
+  
+        profile?.first_name,
+  
+        profile?.last_name,
+  
+        profile?.phone,
+  
+        worker?.profession_id,
+  
+        worker?.bio,
+  
+        worker?.years_experience !== null &&
+        worker?.years_experience !== undefined
+          ? worker.years_experience
+          : null,
+  
+        worker?.primary_location,
+  
+        worker?.preferred_rate !== null &&
+        worker?.preferred_rate !== undefined
+          ? worker.preferred_rate
+          : null,
+  
+        worker?.currency
+  
+      ];
+  
+      const completed = fields.filter(
+        value =>
+          value !== null &&
+          value !== undefined &&
+          String(value).trim() !== ""
+      ).length;
+  
+      return Math.round(
+        (completed / fields.length) * 100
+      );
+  
+    }
+  
+  
+    function setAvailability(status) {
+  
+      const pill = $("availabilityPill");
+      const text = $("availabilityText");
+  
+      if (!pill || !text) return;
+  
+      const normalized = normalize(status);
+  
+      text.textContent =
+        formatStatus(status || "Not set");
+  
+      /*
+       * Keep the status-pill class.
+       * The old code removed it, which removed
+       * the pill's layout styling.
+       */
+  
+      if (normalized === "available") {
+  
+        pill.style.background =
+          "var(--success-bg)";
+  
+        pill.style.color =
+          "var(--success)";
+  
+      } else if (
+        normalized === "unavailable" ||
+        normalized === "not_available"
+      ) {
+  
+        pill.style.background =
+          "var(--danger-bg)";
+  
+        pill.style.color =
+          "var(--danger)";
+  
+      } else {
+  
+        pill.style.background =
+          "var(--warning-bg)";
+  
+        pill.style.color =
+          "var(--warning)";
+  
+      }
+  
+    }
+  
+  
+    /* =========================================================
+       JOB FIELD HELPERS
+       ========================================================= */
+  
+    function getJobTitle(job) {
+  
+      return (
+        job?.title ||
+        job?.job_title ||
+        job?.name ||
+        job?.position ||
+        job?.position_title ||
+        "Untitled Job"
+      );
+  
+    }
+  
+  
+    function getJobDescription(job) {
+  
+      return (
+        job?.description ||
+        job?.job_description ||
+        job?.details ||
+        job?.summary ||
+        ""
+      );
+  
+    }
+  
+  
+    function getJobLocation(job) {
+  
+      return (
+        job?.location ||
+        job?.job_location ||
+        job?.primary_location ||
+        job?.city ||
+        job?.area ||
+        ""
+      );
+  
+    }
+  
+  
+    function getJobProfessionId(job) {
+  
+      return (
+        job?.profession_id ??
+        job?.professionId ??
+        null
+      );
+  
+    }
+  
+  
+    function getJobProfessionName(job) {
+  
+      if (typeof job?.profession === "string") {
+        return job.profession;
+      }
+  
+      if (
+        job?.profession &&
+        typeof job.profession === "object"
+      ) {
+  
+        return (
+          job.profession.name ||
+          job.profession.title ||
+          ""
+        );
+  
+      }
+  
+      return (
+        job?.profession_name ||
+        job?.profession_title ||
+        job?.trade ||
+        job?.trade_name ||
+        job?.profession_type ||
+        ""
+      );
+  
+    }
+  
+  
+    function getJobCategoryId(job) {
+  
+      return (
+        job?.category_id ??
+        job?.categoryId ??
+        null
+      );
+  
+    }
+  
+  
+    function getJobCategoryName(job) {
+  
+      if (typeof job?.category === "string") {
+        return job.category;
+      }
+  
+      if (
+        job?.category &&
+        typeof job.category === "object"
+      ) {
+  
+        return (
+          job.category.name ||
+          job.category.title ||
+          ""
+        );
+  
+      }
+  
+      return job?.category_name || "";
+  
+    }
+  
+  
+    function getJobRate(job) {
+  
+      return (
+        job?.rate ??
+        job?.salary ??
+        job?.budget ??
+        job?.amount ??
+        job?.price ??
+        ""
+      );
+  
+    }
+  
+  
+    function getJobStatus(job) {
+  
+      return normalize(
+        job?.status ||
+        job?.job_status ||
+        job?.state ||
+        "active"
+      );
+  
+    }
+  
+  
+    function getJobCreatedAt(job) {
+  
+      return (
+        job?.created_at ||
+        job?.published_at ||
+        job?.date_posted ||
+        null
+      );
+  
+    }
+  
+  
+    /* =========================================================
+       PROFILE
+       ========================================================= */
+  
+    function renderProfile(
+      profile,
+      worker,
+      profession
+    ) {
+  
+      const fullName = [
+        profile?.first_name,
+        profile?.last_name
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .trim() || "Worker";
+  
+      const workerInitials = initials(
+        profile?.first_name,
+        profile?.last_name
+      );
+  
+      $("welcomeTitle").textContent =
+        `Welcome back, ${profile?.first_name || "Worker"} 👋`;
+  
+      $("topUserName").textContent =
+        fullName;
+  
+      $("profileName").textContent =
+        fullName;
+  
+      $("profileProfession").textContent =
+        profession?.name ||
+        "Profession not set";
+  
+      $("profileBio").textContent =
+        worker?.bio ||
+        "Add a professional summary to tell employers about your experience and skills.";
+  
+      $("workerNumber").textContent =
+        worker?.worker_number ||
+        "Not assigned";
+  
+      $("experience").textContent =
+        worker?.years_experience !== null &&
+        worker?.years_experience !== undefined
+          ? `${worker.years_experience} year${Number(worker.years_experience) === 1 ? "" : "s"}`
+          : "Not provided";
+  
+      $("location").textContent =
+        worker?.primary_location ||
+        "Not provided";
+  
+      $("preferredRate").textContent =
+        worker?.preferred_rate !== null &&
+        worker?.preferred_rate !== undefined
+          ? `${worker.currency || ""} ${worker.preferred_rate}`.trim()
+          : "Not provided";
+  
+      setAvailability(
+        worker?.availability_status
+      );
+  
+      const verification =
+        formatStatus(
+          worker?.verification_status ||
+          "pending"
+        );
+  
+      $("verificationStatus").textContent =
+        verification;
+  
+      const completion =
+        calculateProfileCompletion(
+          profile,
+          worker
+        );
+  
+      $("profileCompletion").textContent =
+        `${completion}%`;
+  
+      $("profileProgressText").textContent =
+        `${completion}%`;
+  
+      $("profileProgressBar").style.width =
+        `${completion}%`;
+  
+      setAvatar(
+        "topAvatarImage",
+        "topInitials",
+        profile?.avatar_url,
+        workerInitials
+      );
+  
+      setAvatar(
+        "profileAvatarImage",
+        "profileInitials",
+        profile?.avatar_url,
+        workerInitials
+      );
+  
+    }
+  
+  
+    /* =========================================================
+       LOAD WORKER
+       ========================================================= */
+  
+    async function loadWorker() {
+  
+      const {
+        data: { session },
+        error: sessionError
+      } = await db.auth.getSession();
+  
+      if (sessionError) {
+        throw sessionError;
+      }
+  
+      if (!session?.user) {
+  
+        window.location.replace(
+          "/index.html"
+        );
+  
+        return;
+  
+      }
+  
+      currentUser = session.user;
+  
+  
+      /*
+       * PROFILE
+       */
+  
+      const {
+        data: profile,
+        error: profileError
+      } = await db
+        .from("profiles")
+        .select(`
+          id,
+          first_name,
+          last_name,
+          phone,
+          avatar_url,
+          status
+        `)
+        .eq("id", currentUser.id)
+        .single();
+  
+      if (profileError) {
+        throw profileError;
+      }
+  
+  
+      if (
+        profile.status &&
+        !["active", "pending"]
+          .includes(
+            String(profile.status).toLowerCase()
+          )
+      ) {
+  
+        await db.auth.signOut();
+  
+        window.location.replace(
+          "/index.html"
+        );
+  
+        return;
+  
+      }
+  
+  
+      /*
+       * ROLE
+       */
+  
+      const {
+        data: roles,
+        error: roleError
+      } = await db
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", currentUser.id);
+  
+      if (roleError) {
+        throw roleError;
+      }
+  
+      const isWorker =
+        (roles || []).some(
+          item =>
+            normalize(item.role) === "worker"
+        );
+  
+      if (!isWorker) {
+  
+        await db.auth.signOut();
+  
+        window.location.replace(
+          "/index.html"
+        );
+  
+        return;
+  
+      }
+  
+  
+      /*
+       * WORKER PROFILE
+       */
+  
+      const {
+        data: worker,
+        error: workerError
+      } = await db
+        .from("worker_profiles")
+        .select(`
+          id,
+          user_id,
+          worker_number,
+          profession_id,
+          bio,
+          years_experience,
+          primary_location,
+          preferred_rate,
+          currency,
+          availability_status,
+          verification_status,
+          is_active
+        `)
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .maybeSingle();
+  
+      if (workerError) {
+        throw workerError;
+      }
+  
+  
+      /*
+       * PROFESSION
+       */
+  
+      let profession = null;
+  
+      if (worker?.profession_id) {
+  
+        const {
+          data,
+          error
+        } = await db
+          .from("professions")
+          .select(`
+            id,
+            name,
+            description,
+            category_id
+          `)
+          .eq(
+            "id",
+            worker.profession_id
+          )
+          .maybeSingle();
+  
+        if (!error) {
+          profession = data;
+        }
+  
+      }
+  
+  
+      workerProfile = worker;
+      workerProfession = profession;
+  
+  
+      window.currentWorkerData = {
+        profile,
+        worker,
+        profession
+      };
+  
+  
+      renderProfile(
+        profile,
+        worker,
+        profession
+      );
+  
+      populateProfileEditor(
+        profile,
+        worker
+      );
+  
+      populateProfessionPage(
+        profile,
+        worker,
+        profession
+      );
+  
+      populateSettings(
+        profile,
+        worker
+      );
+  
+  
+      /*
+       * LOAD APPLICATIONS
+       */
+  
+      await loadApplications();
+  
+  
+      /*
+       * LOAD JOBS
+       */
+  
+      await loadJobs();
+  
+  
+      /*
+       * SEARCH
+       */
+  
+      setupJobSearch();
+  
+    }
+  
+  
+    /* =========================================================
+       JOB MATCHING
+       ========================================================= */
+  
+    function jobMatchesWorker(job) {
+  
+      if (!workerProfile) {
+        return false;
+      }
+  
+  
+      const workerProfessionId =
+        normalize(
+          workerProfile.profession_id
+        );
+  
+      const workerProfessionName =
+        normalize(
+          workerProfession?.name
+        );
+  
+      const workerCategoryId =
+        normalize(
+          workerProfession?.category_id
+        );
+  
+      const workerLocation =
+        normalize(
+          workerProfile.primary_location
+        );
+  
+  
+      const jobProfessionId =
+        normalize(
+          getJobProfessionId(job)
+        );
+  
+      const jobProfessionName =
+        normalize(
+          getJobProfessionName(job)
+        );
+  
+      const jobCategoryId =
+        normalize(
+          getJobCategoryId(job)
+        );
+  
+      const jobCategoryName =
+        normalize(
+          getJobCategoryName(job)
+        );
+  
+      const jobLocation =
+        normalize(
+          getJobLocation(job)
+        );
+  
+  
+      /*
+       * If job has a profession ID,
+       * profession ID is the strongest match.
+       */
+  
+      if (
+        workerProfessionId &&
+        jobProfessionId
+      ) {
+  
+        if (
+          workerProfessionId ===
+          jobProfessionId
+        ) {
+  
+          return true;
+  
+        }
+  
+        /*
+         * Job has a profession ID that doesn't
+         * belong to this worker, so don't show it.
+         */
+  
+        return false;
+  
+      }
+  
+  
+      /*
+       * If profession IDs aren't available,
+       * compare profession names.
+       */
+  
+      if (
+        workerProfessionName &&
+        jobProfessionName
+      ) {
+  
+        if (
+          jobProfessionName ===
+          workerProfessionName
+        ) {
+  
+          return true;
+  
+        }
+  
+        if (
+          jobProfessionName.includes(
+            workerProfessionName
+          ) ||
+          workerProfessionName.includes(
+            jobProfessionName
+          )
+        ) {
+  
+          return true;
+  
+        }
+  
+      }
+  
+  
+      /*
+       * Category matching.
+       */
+  
+      if (
+        workerCategoryId &&
+        jobCategoryId &&
+        workerCategoryId ===
+        jobCategoryId
+      ) {
+  
+        return true;
+  
+      }
+  
+  
+      /*
+       * If a job has no profession/category,
+       * use location as a fallback.
+       */
+  
+      if (
+        !jobProfessionId &&
+        !jobProfessionName &&
+        !jobCategoryId &&
+        !jobCategoryName &&
+        workerLocation &&
+        jobLocation
+      ) {
+  
+        return (
+          jobLocation.includes(
+            workerLocation
+          ) ||
+          workerLocation.includes(
+            jobLocation
+          )
+        );
+  
+      }
+  
+  
+      return false;
+  
+    }
+  
+  
+    function getMatchingJobs(jobs) {
+  
+      return (jobs || [])
+        .filter(job => {
+  
+          /*
+           * Hide obviously inactive jobs.
+           */
+  
+          const status =
+            getJobStatus(job);
+  
+          if (
+            [
+              "closed",
+              "cancelled",
+              "canceled",
+              "expired",
+              "draft",
+              "inactive"
+            ].includes(status)
+          ) {
+  
+            return false;
+  
+          }
+  
+  
+          /*
+           * If is_active exists and is explicitly
+           * false, hide the job.
+           */
+  
+          if (
+            job.is_active === false
+          ) {
+  
+            return false;
+  
+          }
+  
+  
+          return jobMatchesWorker(job);
+  
+        })
+        .sort(
+          (a, b) => {
+  
+            const dateA =
+              new Date(
+                getJobCreatedAt(a) || 0
+              ).getTime();
+  
+            const dateB =
+              new Date(
+                getJobCreatedAt(b) || 0
+              ).getTime();
+  
+            return dateB - dateA;
+  
+          }
+        );
+  
+    }
+  
+  
+    /* =========================================================
+       JOB CARD
+       ========================================================= */
+  
+    function renderJobCard(job) {
+  
+      const title =
+        escapeHtml(
+          getJobTitle(job)
+        );
+  
+      const description =
+        escapeHtml(
+          getJobDescription(job)
+        );
+  
+      const location =
+        escapeHtml(
+          getJobLocation(job)
+        );
+  
+      const profession =
+        escapeHtml(
+          getJobProfessionName(job)
+        );
+  
+      const category =
+        escapeHtml(
+          getJobCategoryName(job)
+        );
+  
+      const rate =
+        getJobRate(job);
+  
+      const safeRate =
+        escapeHtml(
+          rate
+        );
+  
+      const jobId =
+        String(job?.id || "");
+  
+  
+      const meta = [];
+  
+  
+      if (profession) {
+  
+        meta.push(
+          `<span>${profession}</span>`
+        );
+  
+      }
+  
+  
+      if (category) {
+  
+        meta.push(
+          `<span>${category}</span>`
+        );
+  
+      }
+  
+  
+      if (location) {
+  
+        meta.push(
+          `<span>${location}</span>`
+        );
+  
+      }
+  
+  
+      if (rate !== "") {
+  
+        meta.push(
+          `<span>${safeRate}</span>`
+        );
+  
+      }
+  
+  
+      return `
+        <div class="dashboard-related-job">
+  
+          <div class="dashboard-related-job-info">
+  
+            <h3 class="dashboard-related-job-title">
+              ${title}
+            </h3>
+  
+            ${
+              meta.length
+                ? `
+                  <div class="dashboard-related-job-meta">
+                    ${meta.join("")}
+                  </div>
+                `
+                : ""
+            }
+  
+            ${
+              description
+                ? `
+                  <p class="dashboard-related-job-description">
+                    ${description}
+                  </p>
+                `
+                : ""
+            }
+  
+          </div>
+  
+          <button
+            type="button"
+            class="dashboard-job-btn"
+            data-job-id="${escapeHtml(jobId)}"
+          >
+            View Job
+          </button>
+  
+        </div>
+      `;
+  
+    }
+  
+  
+    /* =========================================================
+       DASHBOARD JOBS
+       ========================================================= */
+  
+    function renderDashboardJobs(
+      jobs,
+      searchTerm = ""
+    ) {
+  
+      const container =
+        $("dashboardRelatedJobs");
+  
+      if (!container) {
+        return;
+      }
+  
+  
+      const search =
+        normalize(searchTerm);
+  
+  
+      let filteredJobs =
+        jobs || [];
+  
+  
+      if (search) {
+  
+        filteredJobs =
+          filteredJobs.filter(
+            job => {
+  
+              const searchableText = [
+                getJobTitle(job),
+                getJobDescription(job),
+                getJobLocation(job),
+                getJobProfessionName(job),
+                getJobCategoryName(job)
+              ]
+                .join(" ")
+                .toLowerCase();
+  
+              return searchableText.includes(
+                search
+              );
+  
+            }
+          );
+  
+      }
+  
+  
+      if (!filteredJobs.length) {
+  
+        container.innerHTML = `
+          <div class="dashboard-jobs-empty">
+  
+            <div class="empty-icon">
+              ⌕
+            </div>
+  
+            <strong>
+              No matching jobs found
+            </strong>
+  
+            <p>
+              There are currently no jobs matching your profession.
+              Check back when new opportunities are posted.
+            </p>
+  
+          </div>
+        `;
+  
+        return;
+  
+      }
+  
+  
+      /*
+       * Dashboard shows the first 5 jobs.
+       */
+  
+      container.innerHTML =
+        filteredJobs
+          .slice(0, 5)
+          .map(renderJobCard)
+          .join("");
+  
+  
+      attachJobButtons(
+        container
+      );
+  
+    }
+  
+  
+    /* =========================================================
+       JOBS PAGE
+       ========================================================= */
+  
+    function renderJobsPage(
+      jobs,
+      searchTerm = ""
+    ) {
+  
+      const container =
+        $("jobsPageList");
+  
+      if (!container) {
+        return;
+      }
+  
+  
+      const search =
+        normalize(searchTerm);
+  
+  
+      let filteredJobs =
+        jobs || [];
+  
+  
+      if (search) {
+  
+        filteredJobs =
+          filteredJobs.filter(
+            job => {
+  
+              const searchableText = [
+                getJobTitle(job),
+                getJobDescription(job),
+                getJobLocation(job),
+                getJobProfessionName(job),
+                getJobCategoryName(job)
+              ]
+                .join(" ")
+                .toLowerCase();
+  
+              return searchableText.includes(
+                search
+              );
+  
+            }
+          );
+  
+      }
+  
+  
+      if (!filteredJobs.length) {
+  
+        container.innerHTML = `
+          <div class="dashboard-jobs-empty">
+  
+            <div class="empty-icon">
+              ⌕
+            </div>
+  
+            <strong>
+              No jobs found
+            </strong>
+  
+            <p>
+              Try another search term or check back later.
+            </p>
+  
+          </div>
+        `;
+  
+        return;
+  
+      }
+  
+  
+      container.innerHTML =
+        filteredJobs
+          .map(renderJobCard)
+          .join("");
+  
+  
+      attachJobButtons(
+        container
+      );
+  
+    }
+  
+  
+    /* =========================================================
+       JOB BUTTONS
+       ========================================================= */
+  
+    function attachJobButtons(
+      container
+    ) {
+  
+      container
+        .querySelectorAll(
+          "[data-job-id]"
+        )
+        .forEach(button => {
+  
+          button.addEventListener(
+            "click",
+            () => {
+  
+              const jobId =
+                button.dataset.jobId;
+  
+              openJob(jobId);
+  
+            }
+          );
+  
+        });
+  
+    }
+  
+  
+    function openJob(jobId) {
+  
+      if (!jobId) {
+  
+        showToast(
+          "This job could not be opened."
+        );
+  
+        return;
+  
+      }
+  
+  
+      /*
+       * Change this URL if your job details page
+       * has a different location.
+       */
+  
+      window.location.href =
+        `/worker/job-details.html?id=${encodeURIComponent(jobId)}`;
+  
+    }
+  
+  
+    /* =========================================================
+       LOAD JOBS FROM SUPABASE
+       ========================================================= */
+  
+    async function loadJobs() {
+  
+      const dashboardContainer =
+        $("dashboardRelatedJobs");
+  
+      const jobsPageContainer =
+        $("jobsPageList");
+  
+  
+      if (dashboardContainer) {
+  
+        dashboardContainer.innerHTML = `
+          <div class="jobs-loading">
+            Loading jobs...
+          </div>
+        `;
+  
+      }
+  
+  
+      if (jobsPageContainer) {
+  
+        jobsPageContainer.innerHTML = `
+          <div class="jobs-loading">
+            Loading jobs...
+          </div>
+        `;
+  
+      }
+  
+  
+      try {
+  
+        /*
+         * Load all jobs visible to the authenticated worker.
+         *
+         * RLS on Supabase still controls which rows
+         * the worker is allowed to see.
+         */
+  
+        const {
+          data: jobs,
+          error
+        } = await db
+          .from("jobs")
+          .select("*")
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+  
+  
+        if (error) {
+  
+          console.error(
+            "Jobs query error:",
+            error
+          );
+  
+          throw error;
+  
+        }
+  
+  
+        allJobs =
+          Array.isArray(jobs)
+            ? jobs
+            : [];
+  
+  
+        /*
+         * Store globally as well so the search
+         * and other parts of the dashboard can use it.
+         */
+  
+        window.allJobs =
+          allJobs;
+  
+  
+        /*
+         * Match jobs to the worker's profession.
+         */
+  
+        matchingJobs =
+          getMatchingJobs(
+            allJobs
+          );
+  
+  
+        window.matchingJobs =
+          matchingJobs;
+  
+  
+        /*
+         * Update dashboard subtitle.
+         */
+  
+        const subtitle =
+          $("dashboardJobsSubtitle");
+  
+        if (subtitle) {
+  
+          if (workerProfession?.name) {
+  
+            subtitle.textContent =
+              `${matchingJobs.length} job${matchingJobs.length === 1 ? "" : "s"} matching ${workerProfession.name}`;
+  
+          } else {
+  
+            subtitle.textContent =
+              "Jobs matching your profession";
+  
+          }
+  
+        }
+  
+  
+        /*
+         * Update Jobs page subtitle.
+         */
+  
+        const jobsSubtitle =
+          $("jobsPageSubtitle");
+  
+        if (jobsSubtitle) {
+  
+          if (workerProfession?.name) {
+  
+            jobsSubtitle.textContent =
+              `${matchingJobs.length} matching job${matchingJobs.length === 1 ? "" : "s"} for ${workerProfession.name}`;
+  
+          } else {
+  
+            jobsSubtitle.textContent =
+              `${matchingJobs.length} matching jobs`;
+  
+          }
+  
+        }
+  
+  
+        /*
+         * Dashboard job count.
+         */
+  
+        const jobCount =
+          $("jobCount");
+  
+        if (jobCount) {
+  
+          jobCount.textContent =
+            matchingJobs.length;
+  
+        }
+  
+  
+        /*
+         * Dashboard.
+         */
+  
+        renderDashboardJobs(
+          matchingJobs
+        );
+  
+  
+        /*
+         * Jobs tab.
+         *
+         * IMPORTANT:
+         * It uses matchingJobs, not allJobs.
+         * This means the Jobs tab actually shows
+         * jobs matching this worker.
+         */
+  
+        renderJobsPage(
+          matchingJobs
+        );
+  
+  
+      } catch (error) {
+  
+        console.error(
+          "Failed to load jobs:",
+          error
+        );
+  
+  
+        if (dashboardContainer) {
+  
+          dashboardContainer.innerHTML = `
+            <div class="dashboard-jobs-empty">
+  
+              <div class="empty-icon">
+                !
+              </div>
+  
+              <strong>
+                Unable to load jobs
+              </strong>
+  
+              <p>
+                ${escapeHtml(
+                  error?.message ||
+                  "Please refresh the page and try again."
+                )}
+              </p>
+  
+            </div>
+          `;
+  
+        }
+  
+  
+        if (jobsPageContainer) {
+  
+          jobsPageContainer.innerHTML = `
+            <div class="dashboard-jobs-empty">
+  
+              <div class="empty-icon">
+                !
+              </div>
+  
+              <strong>
+                Unable to load jobs
+              </strong>
+  
+              <p>
+                ${escapeHtml(
+                  error?.message ||
+                  "Please refresh the page and try again."
+                )}
+              </p>
+  
+            </div>
+          `;
+  
+        }
+  
+  
+        const jobCount =
+          $("jobCount");
+  
+        if (jobCount) {
+          jobCount.textContent = "0";
+        }
+  
+      }
+  
+    }
+  
+  
+    /* =========================================================
+       JOB SEARCH
+       ========================================================= */
+  
+    function searchJobs(
+      jobs,
+      searchTerm
+    ) {
+  
+      const search =
+        normalize(searchTerm);
+  
+  
+      if (!search) {
+        return jobs;
+      }
+  
+  
+      return jobs.filter(
+        job => {
+  
+          const searchableText = [
+  
+            getJobTitle(job),
+  
+            getJobDescription(job),
+  
+            getJobLocation(job),
+  
+            getJobProfessionName(job),
+  
+            getJobCategoryName(job)
+  
+          ]
+            .join(" ")
+            .toLowerCase();
+  
+  
+          return searchableText.includes(
+            search
+          );
+  
+        }
+      );
+  
+    }
+  
+  
+    function setupJobSearch() {
+  
+      /*
+       * Dashboard search
+       */
+  
+      const dashboardForm =
+        $("dashboardJobSearchForm");
+  
+      const dashboardInput =
+        $("dashboardJobSearch");
+  
+  
+      if (
+        dashboardForm &&
+        dashboardInput
+      ) {
+  
+        dashboardForm.addEventListener(
+          "submit",
+          event => {
+  
+            event.preventDefault();
+  
+            const results =
+              searchJobs(
+                matchingJobs,
+                dashboardInput.value
+              );
+  
+  
+            renderDashboardJobs(
+              results
+            );
+  
+  
+            /*
+             * Keep the dashboard count based
+             * on the actual matching jobs,
+             * not search results.
+             */
+  
+          }
+        );
+  
+      }
+  
+  
+      /*
+       * Jobs page search
+       */
+  
+      const jobsForm =
+        $("jobsPageSearchForm");
+  
+      const jobsInput =
+        $("jobsPageSearch");
+  
+  
+      if (
+        jobsForm &&
+        jobsInput
+      ) {
+  
+        jobsForm.addEventListener(
+          "submit",
+          event => {
+  
+            event.preventDefault();
+  
+            const results =
+              searchJobs(
+                matchingJobs,
+                jobsInput.value
+              );
+  
+  
+            renderJobsPage(
+              results
+            );
+  
+          }
+        );
+  
+      }
+  
+    }
+  
+  
+    /* =========================================================
+       PROFILE EDITOR
+       ========================================================= */
+  
+    function populateProfileEditor(
+      profile,
+      worker
+    ) {
+  
+      $("firstNameInput").value =
+        profile?.first_name || "";
+  
+      $("lastNameInput").value =
+        profile?.last_name || "";
+  
+      $("phoneInput").value =
+        profile?.phone || "";
+  
+      $("locationInput").value =
+        worker?.primary_location || "";
+  
+      $("experienceInput").value =
+        worker?.years_experience ?? "";
+  
+      $("rateInput").value =
+        worker?.preferred_rate ?? "";
+  
+      $("currencyInput").value =
+        worker?.currency || "";
+  
+      $("availabilityInput").value =
+        worker?.availability_status ||
+        "available";
+  
+      $("bioInput").value =
+        worker?.bio || "";
+  
+  
+      const fullName =
+        [
+          profile?.first_name,
+          profile?.last_name
+        ]
+          .filter(Boolean)
+          .join(" ") ||
+        "Worker";
+  
+  
+      $("editProfileName").textContent =
+        fullName;
+  
+  
+      const workerInitials =
+        initials(
+          profile?.first_name,
+          profile?.last_name
+        );
+  
+  
+      setAvatar(
+        "editAvatarImage",
+        "editInitials",
+        profile?.avatar_url,
+        workerInitials
+      );
+  
+    }
+  
+  
+    /* =========================================================
+       PROFESSION PAGE
+       ========================================================= */
+  
+    function populateProfessionPage(
+      profile,
+      worker,
+      profession
+    ) {
+  
+      $("professionPageName").textContent =
+        profession?.name ||
+        "Profession not set";
+  
+  
+      $("professionPageDescription").textContent =
+        profession?.description ||
+        "No profession description is currently available.";
+  
+  
+      $("professionCategory").textContent =
+        profession?.category_id ||
+        "Not assigned";
+  
+  
+      $("professionExperience").textContent =
+        worker?.years_experience != null
+          ? `${worker.years_experience} year${Number(worker.years_experience) === 1 ? "" : "s"}`
+          : "Not provided";
+  
+  
+      $("professionLocation").textContent =
+        worker?.primary_location ||
+        "Not provided";
+  
+  
+      $("professionVerification").textContent =
+        formatStatus(
+          worker?.verification_status ||
+          "pending"
+        );
+  
+    }
+  
+  
+    /* =========================================================
+       SETTINGS
+       ========================================================= */
+  
+    function populateSettings(
+      profile,
+      worker
+    ) {
+  
+      $("settingsAccountStatus").textContent =
+        formatStatus(
+          profile?.status ||
+          "active"
+        );
+  
+  
+      $("settingsEmail").textContent =
+        currentUser?.email ||
+        "—";
+  
+  
+      $("settingsAvailability").textContent =
+        formatStatus(
+          worker?.availability_status ||
+          "Not set"
+        );
+  
+  
+      $("settingsVerification").textContent =
+        formatStatus(
+          worker?.verification_status ||
+          "pending"
+        );
+  
+    }
+  
+  
+    /* =========================================================
+       SAVE PROFILE
+       ========================================================= */
+  
+    async function saveProfile() {
+  
+      if (
+        !currentUser ||
+        !workerProfile
+      ) {
+        return;
+      }
+  
+  
+      const button =
+        $("saveProfileBtn");
+  
+  
+      const original =
+        button.textContent;
+  
+  
+      button.disabled = true;
+      button.textContent = "Saving...";
+  
+  
+      try {
+  
+        const firstName =
+          $("firstNameInput")
+            .value
+            .trim();
+  
+  
+        const lastName =
+          $("lastNameInput")
+            .value
+            .trim();
+  
+  
+        const phone =
+          $("phoneInput")
+            .value
+            .trim();
+  
+  
+        const {
+          error: profileError
+        } = await db
+          .from("profiles")
+          .update({
+            first_name: firstName,
+            last_name: lastName,
+            phone: phone
+          })
+          .eq(
+            "id",
+            currentUser.id
+          );
+  
+  
+        if (profileError) {
+          throw profileError;
+        }
+  
+  
+        const yearsRaw =
+          $("experienceInput")
+            .value;
+  
+  
+        const rateRaw =
+          $("rateInput")
+            .value;
+  
+  
+        const {
+          data: updatedWorker,
+          error: workerError
+        } = await db
+          .from("worker_profiles")
+          .update({
+  
+            bio:
+              $("bioInput")
+                .value
+                .trim(),
+  
+            years_experience:
+              yearsRaw === ""
+                ? null
+                : Number(yearsRaw),
+  
+            primary_location:
+              $("locationInput")
+                .value
+                .trim(),
+  
+            preferred_rate:
+              rateRaw === ""
+                ? null
+                : Number(rateRaw),
+  
+            currency:
+              $("currencyInput")
+                .value
+                .trim() ||
+              null,
+  
+            availability_status:
+              $("availabilityInput")
+                .value
+  
+          })
+          .eq(
+            "user_id",
+            currentUser.id
+          )
+          .select(`
+            id,
+            user_id,
+            worker_number,
+            profession_id,
+            bio,
+            years_experience,
+            primary_location,
+            preferred_rate,
+            currency,
+            availability_status,
+            verification_status,
+            is_active
+          `)
+          .single();
+  
+  
+        if (workerError) {
+          throw workerError;
+        }
+  
+  
+        workerProfile =
+          updatedWorker;
+  
+  
+        /*
+         * Refresh profile.
+         */
+  
+        const {
+          data: refreshedProfile,
+          error: refreshedError
+        } = await db
+          .from("profiles")
+          .select(`
+            id,
+            first_name,
+            last_name,
+            phone,
+            avatar_url,
+            status
+          `)
+          .eq(
+            "id",
+            currentUser.id
+          )
+          .single();
+  
+  
+        if (refreshedError) {
+          throw refreshedError;
+        }
+  
+  
+        window.currentWorkerData = {
+          profile: refreshedProfile,
+          worker: updatedWorker,
+          profession: workerProfession
+        };
+  
+  
+        renderProfile(
+          refreshedProfile,
+          updatedWorker,
+          workerProfession
+        );
+  
+  
+        populateProfileEditor(
+          refreshedProfile,
+          updatedWorker
+        );
+  
+  
+        populateProfessionPage(
+          refreshedProfile,
+          updatedWorker,
+          workerProfession
+        );
+  
+  
+        populateSettings(
+          refreshedProfile,
+          updatedWorker
+        );
+  
+  
+        /*
+         * Reload matching jobs because the worker's
+         * location/availability may have changed.
+         */
+  
+        await loadJobs();
+  
+  
+        showToast(
+          "Profile updated successfully."
+        );
+  
+  
+        openSection(
+          "profile"
+        );
+  
+  
+      } catch (error) {
+  
+        console.error(
+          "Profile save error:",
+          error
+        );
+  
+        showToast(
+          error.message ||
+          "Unable to save your profile."
+        );
+  
+  
+      } finally {
+  
+        button.disabled = false;
+        button.textContent = original;
+  
+      }
+  
+    }
+  
+  
+    /* =========================================================
+       APPLICATIONS
+       ========================================================= */
+  
+    async function loadApplications() {
+  
+      const containers = [
+        $("applicationsList"),
+        $("applicationsPageList")
+      ].filter(Boolean);
+  
+  
+      const message = `
+        <div class="empty">
+  
+          <div class="empty-icon">
+            ✓
+          </div>
+  
+          <strong>
+            No application records are connected yet.
+          </strong>
+  
+          <p>
+            When your applications table is connected,
+            your submitted jobs and statuses will appear here.
+          </p>
+  
+        </div>
+      `;
+  
+  
+      containers.forEach(
+        container => {
+          container.innerHTML =
+            message;
+        }
+      );
+  
+  
+      if ($("applicationCount")) {
+        $("applicationCount").textContent =
+          "0";
+      }
+  
+    }
+  
+  
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+  
+    function openSection(
+      sectionName
+    ) {
+  
+      const target =
+        String(
+          sectionName ||
+          "dashboard"
+        );
+  
+  
+      document
+        .querySelectorAll(
+          ".page-section"
+        )
+        .forEach(section => {
+  
+          section.classList.toggle(
+            "active",
+            section.dataset.page ===
+            target
+          );
+  
+        });
+  
+  
+      document
+        .querySelectorAll(
+          ".nav-link"
+        )
+        .forEach(link => {
+  
+          link.classList.toggle(
+            "active",
+            link.dataset.section ===
+            target
+          );
+  
+        });
+  
+  
+      const titles = {
+  
+        dashboard:
+          "Worker Portal",
+  
+        profile:
+          "My Profile",
+  
+        profession:
+          "My Profession",
+  
+        applications:
+          "Applications",
+  
+        jobs:
+          "Jobs",
+  
+        messages:
+          "Messages",
+  
+        settings:
+          "Settings"
+  
+      };
+  
+  
+      $("pageTitle").textContent =
+        titles[target] ||
+        "Worker Portal";
+  
+  
+      /*
+       * Fixed the old title bug:
+       *
+       * OLD:
+       * | "Wasl
+       *
+       * NEW:
+       * | Wasl
+       */
+  
+      document.title =
+        `${titles[target] || "Worker Dashboard"} | Wasl`;
+  
+  
+      /*
+       * If the Jobs page is opened,
+       * make sure its latest matching jobs
+       * are rendered.
+       */
+  
+      if (
+        target === "jobs" &&
+        matchingJobs.length
+      ) {
+  
+        const search =
+          $("jobsPageSearch");
+  
+        renderJobsPage(
+          matchingJobs,
+          search?.value || ""
+        );
+  
+      }
+  
+  
+      if (
+        !prefersReducedMotion &&
+        typeof gsap !== "undefined"
+      ) {
+  
+        const active =
+          document.querySelector(
+            `.page-section[data-page="${target}"]`
+          );
+  
+  
+        if (active) {
+  
+          gsap.fromTo(
+  
+            active,
+  
+            {
+              opacity: 0,
+              y: 10
+            },
+  
+            {
+              opacity: 1,
+              y: 0,
+              duration: .3,
+              ease: "power2.out",
+              clearProps: "transform"
+            }
+  
+          );
+  
+        }
+  
+      }
+  
+  
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+  
+  
+      $("sidebar")
+        .classList
+        .remove("open");
+  
+  
+      $("overlay")
+        .classList
+        .remove("show");
+  
+    }
+  
+  
+    /* =========================================================
+       LOGOUT
+       ========================================================= */
+  
+    async function logout() {
+  
+      $("logoutBtn").disabled =
+        true;
+  
+  
+      const {
+        error
+      } = await db.auth.signOut();
+  
+  
+      if (error) {
+  
+        $("logoutBtn").disabled =
+          false;
+  
+        showToast(
+          error.message
+        );
+  
+        return;
+  
+      }
+  
+  
+      window.location.replace(
+        "/index.html"
+      );
+  
+    }
+  
+  
+    /* =========================================================
+       MOBILE MENU
+       ========================================================= */
+  
+    function setupMobileMenu() {
+  
+      const sidebar =
+        $("sidebar");
+  
+      const overlay =
+        $("overlay");
+  
+  
+      function closeMenu() {
+  
+        sidebar.classList.remove(
+          "open"
+        );
+  
+        overlay.classList.remove(
+          "show"
+        );
+  
+      }
+  
+  
+      $("menuBtn")
+        .addEventListener(
+          "click",
+          () => {
+  
+            sidebar.classList.add(
+              "open"
+            );
+  
+            overlay.classList.add(
+              "show"
+            );
+  
+          }
+        );
+  
+  
+      overlay.addEventListener(
+        "click",
+        closeMenu
+      );
+  
+  
+      /*
+       * Navigation.
+       */
+  
+      document
+        .querySelectorAll(
+          "[data-section]"
+        )
+        .forEach(element => {
+  
+          element.addEventListener(
+            "click",
+            () => {
+  
+              openSection(
+                element.dataset.section
+              );
+  
+            }
+          );
+  
+        });
+  
+    }
+  
+  
+    /* =========================================================
+       ANIMATION
+       ========================================================= */
+  
+    function animateDashboard() {
+  
+      if (
+        prefersReducedMotion ||
+        typeof gsap === "undefined"
+      ) {
+        return;
+      }
+  
+  
+      if (
+        window.innerWidth > 800
+      ) {
+  
+        gsap.from(
+          ".sidebar",
+          {
+            x: -30,
+            opacity: 0,
+            duration: .65,
+            ease: "power3.out"
+          }
+        );
+  
+      }
+  
+  
+      gsap.from(
+        ".topbar",
+        {
+          y: -20,
+          opacity: 0,
+          duration: .55,
+          delay: .1,
+          ease: "power3.out"
+        }
+      );
+  
+  
+      gsap.from(
+        ".hero",
+        {
+          y: 20,
+          opacity: 0,
+          duration: .6,
+          delay: .15,
+          ease: "power3.out"
+        }
+      );
+  
+  
+      gsap.from(
+        ".stat-card",
+        {
+          y: 22,
+          opacity: 0,
+          duration: .45,
+          stagger: .07,
+          delay: .25,
+          ease: "power2.out"
+        }
+      );
+  
+  
+      gsap.from(
+        ".page-section.active .card",
+        {
+          y: 25,
+          opacity: 0,
+          duration: .5,
+          stagger: .08,
+          delay: .35,
+          ease: "power3.out"
+        }
+      );
+  
+    }
+  
+  
+    /* =========================================================
+       INIT
+       ========================================================= */
+  
+    async function init() {
+  
+      setupMobileMenu();
+  
+  
+      $("logoutBtn")
+        .addEventListener(
+          "click",
+          logout
+        );
+  
+  
+      $("settingsLogoutBtn")
+        .addEventListener(
+          "click",
+          logout
+        );
+  
+  
+      $("saveProfileBtn")
+        .addEventListener(
+          "click",
+          saveProfile
+        );
+  
+  
+      try {
+  
+        await loadWorker();
+  
+        animateDashboard();
+  
+      } catch (error) {
+  
+        console.error(
+          "Dashboard initialization error:",
+          error
+        );
+  
+  
+        if (
+          error?.message
+            ?.toLowerCase()
+            .includes("jwt") ||
+          error?.message
+            ?.toLowerCase()
+            .includes("auth")
+        ) {
+  
+          window.location.replace(
+            "/index.html"
+          );
+  
+          return;
+  
+        }
+  
+  
+        showToast(
+          error?.message ||
+          "Unable to load your dashboard. Please refresh and try again."
+        );
+  
+      }
+  
+    }
+  
+  
+    init();
+  
+  </script>
+</body>
+</html>

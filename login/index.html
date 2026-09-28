@@ -3,62 +3,2836 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zach Workforce Solutions</title>
+<title>Wasl - Login</title>
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+
 <style>
-:root{--brand:#0066cc;--brand2:#0b1f3b;--ink:#111827;--muted:#6b7280;--line:#e5e7eb}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100vh;display:flex;background:#fff;color:var(--ink)}
-.panel{flex:1;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;display:none;flex-direction:column;justify-content:space-between;padding:56px}
-.panel .logo{font-weight:800;font-size:1.25rem;letter-spacing:-.02em}
-.panel h2{font-size:2.1rem;line-height:1.2;letter-spacing:-.03em;max-width:22ch}
-.panel p{margin-top:14px;opacity:.85;max-width:40ch;line-height:1.6}
-.panel .quote{font-size:.9rem;opacity:.75}
-.form-side{flex:1;display:flex;align-items:center;justify-content:center;padding:32px}
-.form-box{width:100%;max-width:380px}
-.form-box h1{font-size:1.6rem;letter-spacing:-.02em;margin-bottom:6px}
-.form-box>p{color:var(--muted);font-size:.95rem;margin-bottom:28px}
-label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px}
-input[type=email],input[type=password]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:.95rem;transition:border-color .15s,box-shadow .15s;margin-bottom:18px}
-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(79,70,229,.15)}
-.row{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;font-size:.85rem}
-.row label{display:flex;align-items:center;gap:7px;margin:0;font-weight:500;color:var(--muted)}
-.row a{color:var(--brand);text-decoration:none;font-weight:600}
-.row a:hover{text-decoration:underline}
-button{width:100%;padding:13px;border:0;border-radius:10px;background:var(--brand);color:#fff;font-size:.98rem;font-weight:700;cursor:pointer;transition:background .15s}
-button:hover{background:#4338ca}
-.signup{margin-top:26px;text-align:center;font-size:.9rem;color:var(--muted)}
-.signup a{color:var(--brand);font-weight:600;text-decoration:none}
-@media(min-width:880px){.panel{display:flex}}
+:root{
+  --brand:#0066cc;
+  --brand-dark:#0b1f3b;
+  --ink:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --danger:#dc2626;
+  --success:#15803d;
+  --surface:#f8fafc;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  min-height:100vh;
+  display:flex;
+  background:#fff;
+  color:var(--ink);
+}
+
+.panel{
+  flex:1;
+  background:linear-gradient(135deg,var(--brand),var(--brand-dark));
+  color:#fff;
+  display:none;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:56px;
+}
+
+.panel .logo img{
+  max-width:300px;
+  max-height:90px;
+  object-fit:contain;
+}
+
+.panel h2{
+  font-size:2.1rem;
+  line-height:1.2;
+  letter-spacing:-.03em;
+  max-width:22ch;
+}
+
+.panel p{
+  margin-top:14px;
+  opacity:.85;
+  max-width:40ch;
+  line-height:1.6;
+}
+
+.panel .quote{
+  font-size:.9rem;
+  opacity:.75;
+}
+
+.form-side{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+  overflow-y:auto;
+}
+
+.form-box{
+  width:100%;
+  max-width:430px;
+}
+
+.form-box h1{
+  font-size:1.6rem;
+  letter-spacing:-.02em;
+  margin-bottom:6px;
+  margin-top: 150px;
+}
+
+.form-box > p{
+  color:var(--muted);
+  font-size:.95rem;
+  margin-bottom:28px;
+}
+
+.form-view{
+  display:none;
+}
+
+.form-view.active{
+  display:block;
+}
+
+label{
+  display:block;
+  font-size:.85rem;
+  font-weight:600;
+  margin-bottom:6px;
+  margin-top: 20px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  font-size:.95rem;
+  background:#fff;
+  color:var(--ink);
+  transition:border-color .15s,box-shadow .15s;
+}
+
+input,
+select{
+  margin-bottom:18px;
+}
+
+textarea{
+  resize:vertical;
+  min-height:90px;
+  margin-bottom:18px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  outline:none;
+  border-color:var(--brand);
+  box-shadow:0 0 0 3px rgba(0,102,204,.12);
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+  font-size:.85rem;
+}
+
+.row label{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin:0;
+  font-weight:500;
+  color:var(--muted);
+}
+
+.row input[type="checkbox"]{
+  width:auto;
+  margin:0;
+}
+
+a{
+  color:var(--brand);
+  text-decoration:none;
+  font-weight:600;
+}
+
+a:hover{
+  text-decoration:underline;
+}
+
+button{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:10px;
+  background:var(--brand);
+  color:#fff;
+  font-size:.98rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s,opacity .15s;
+}
+
+button:hover{
+  background:#0052a3;
+}
+
+button:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+}
+
+.secondary-button{
+  background:#eef2f7;
+  color:var(--ink);
+  margin-top:10px;
+}
+
+.secondary-button:hover{
+  background:#e2e8f0;
+}
+
+.signup,
+.login-link{
+  margin-top:26px;
+  text-align:center;
+  font-size:.9rem;
+  color:var(--muted);
+}
+
+.message{
+  display:none;
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:.88rem;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+.message.show{
+  display:block;
+}
+
+.message.error{
+  color:#991b1b;
+  background:#fef2f2;
+  border:1px solid #fecaca;
+}
+
+.message.success{
+  color:#166534;
+  background:#f0fdf4;
+  border:1px solid #bbf7d0;
+}
+
+.role-selector{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.role-option{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px;
+  cursor:pointer;
+  text-align:center;
+  transition:.15s;
+  background:#fff;
+}
+
+.role-option:hover{
+  border-color:var(--brand);
+}
+
+.role-option.selected{
+  border-color:var(--brand);
+  background:#eff6ff;
+}
+
+.role-option strong{
+  display:block;
+  font-size:.9rem;
+}
+
+.role-option span{
+  display:block;
+  color:var(--muted);
+  font-size:.78rem;
+  margin-top:4px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0 12px;
+}
+
+.form-grid .full{
+  grid-column:1 / -1;
+}
+
+.section-title{
+  font-size:.9rem;
+  font-weight:700;
+  margin:4px 0 14px;
+}
+
+.back-link{
+  display:inline-block;
+  margin-bottom:20px;
+  font-size:.85rem;
+}
+
+.hidden{
+  display:none !important;
+}
+
+
+/* ============================================================
+   DESKTOP
+   ============================================================ */
+
+@media(min-width:880px){
+
+  .panel{
+    display:flex;
+    width:50%;
+    min-height:100vh;
+  }
+
+  .form-side{
+    width:50%;
+    min-height:100vh;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE / TABLET
+   ============================================================ */
+
+@media(max-width:879px){
+
+  body{
+    display:block;
+    min-height:100vh;
+  }
+
+  .panel{
+    display:none;
+  }
+
+  .form-side{
+    width:100%;
+    min-height:100vh;
+    padding:30px 20px;
+  }
+
+  .form-box{
+    width:100%;
+    max-width:620px;
+    margin:0 auto;
+  }
+
+  /* Registration stays full-screen on mobile */
+  body.register-mode .panel{
+    display:none;
+  }
+
+  body.register-mode .form-side{
+    width:100%;
+  }
+
+}
+
+/* ============================================================
+   MOBILE LOGO
+   ============================================================ */
+
+.mobile-logo{
+  display:none;
+}
+
+
+/* ============================================================
+   MOBILE / TABLET
+   ============================================================ */
+
+@media(max-width:879px){
+
+  .panel{
+    display:none;
+  }
+
+  .form-side{
+    width:100%;
+    min-height:100vh;
+    padding:30px 20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .mobile-logo{
+    display:block;
+    width:100%;
+    text-align:center;
+    margin-bottom:28px;
+  }
+
+  .mobile-logo img{
+    display:inline-block;
+    width:200px;
+    max-width:70%;
+    height:auto;
+    object-fit:contain;
+  }
+
+  .form-box{
+    width:100%;
+    max-width:620px;
+    margin:0 auto;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL PHONES
+   ============================================================ */
+
+@media(max-width:600px){
+
+  .form-side{
+    padding:24px 18px;
+  }
+
+  .mobile-logo{
+    margin-bottom:24px;
+  }
+
+  .mobile-logo img{
+    width:130px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid .full{
+    grid-column:auto;
+  }
+
+}@media(max-width:879px){
+  .panel{
+    display:none;
+  }
+
+  .form-side{
+    width:100%;
+    min-height:100vh;
+    padding:20px;
+    display:block;
+    overflow-y:auto;
+  }
+
+  .mobile-logo{
+    display:block;
+    width:auto;
+    text-align:left;
+    margin:0 0 30px 0;
+  }
+
+  .mobile-logo img{
+    display:block;
+    width:140px;
+    height:auto;
+    object-fit:contain;
+  }
+
+  .form-box{
+    width:100%;
+    max-width:620px;
+    margin:0 auto;
+  }
+}
+
+@media(max-width:600px){
+  .form-side{
+    padding:16px 18px 40px;
+  }
+
+  .mobile-logo{
+    margin-bottom:25px;
+  }
+
+  .mobile-logo img{
+    width:200px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid .full{
+    grid-column:auto;
+  }
+}
+
+
+/* ============================================================
+   SMALL PHONES
+   ============================================================ */
+
+@media(max-width:600px){
+
+  .form-side{
+    padding:24px 18px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid .full{
+    grid-column:auto;
+  }
+
+  .form-box{
+    width:100%;
+  }
+
+}
+
+/* ============================================================
+   GSAP ANIMATION HELPERS
+   ============================================================ */
+
+   .panel .logo,
+.panel h2,
+.panel > div:nth-child(2) p,
+.panel .quote,
+.form-box {
+  will-change: transform, opacity;
+}
+
+.form-view {
+  will-change: transform, opacity;
+}
+
+.form-box input,
+.form-box select,
+.form-box textarea,
+.form-box button,
+.role-option,
+.section-title,
+.form-grid > div,
+.form-box label,
+.signup,
+.login-link,
+.back-link {
+  will-change: transform, opacity;
+}
+
+
+/* Button shine effect */
+
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.18),
+    transparent
+  );
+  transform: skewX(-20deg);
+}
+
+button:hover::after {
+  animation: buttonShine .65s ease;
+}
+
+@keyframes buttonShine {
+  from {
+    left: -120%;
+  }
+
+  to {
+    left: 140%;
+  }
+}
+
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.site-logo {
+  display: block;
+  width: fit-content;
+}
+
+.site-logo img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* Mobile logo */
+@media(max-width:879px){
+
+  .site-logo img {
+    width: 200px;
+    margin: 0 auto 24px;
+  }
+
+}
+
+/* ============================================================
+   GSAP ANIMATIONS
+   ============================================================ */
+
+const prefersReducedMotion =
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+
+/* ------------------------------------------------------------
+   PAGE LOAD ANIMATION
+   ------------------------------------------------------------ */
+
+function animatePageIn() {
+
+  if (prefersReducedMotion) {
+    return;
+  }
+
+  const timeline =
+    gsap.timeline({
+      defaults:{
+        ease:"power3.out"
+      }
+    });
+
+
+  /*
+   * Left panel
+   */
+
+  timeline
+    .from(
+      ".panel .logo",
+      {
+        opacity:0,
+        y:-25,
+        duration:.7
+      }
+    )
+    .from(
+      ".panel h2",
+      {
+        opacity:0,
+        y:25,
+        duration:.7
+      },
+      "-=.35"
+    )
+    .from(
+      ".panel > div:nth-child(2) p",
+      {
+        opacity:0,
+        y:15,
+        duration:.6
+      },
+      "-=.45"
+    )
+    .from(
+      ".panel .quote",
+      {
+        opacity:0,
+        y:15,
+        duration:.6
+      },
+      "-=.35"
+    );
+
+
+  /*
+   * Form area
+   */
+
+  timeline.from(
+    ".form-box",
+    {
+      opacity:0,
+      x:35,
+      duration:.7
+    },
+    "-=.55"
+  );
+
+
+  /*
+   * Login fields
+   */
+
+  animateActiveView();
+}
+
+
+/* ------------------------------------------------------------
+   ACTIVE FORM ANIMATION
+   ------------------------------------------------------------ */
+
+function animateActiveView() {
+
+  if (prefersReducedMotion) {
+    return;
+  }
+
+  const activeView =
+    document.querySelector(
+      ".form-view.active"
+    );
+
+  if (!activeView) {
+    return;
+  }
+
+
+  const elements =
+    activeView.querySelectorAll(
+      "h1, p, .back-link, .section-title, " +
+      ".role-option, label, input, select, " +
+      "textarea, button, .signup, .login-link"
+    );
+
+
+  gsap.fromTo(
+    elements,
+    {
+      opacity:0,
+      y:12
+    },
+    {
+      opacity:1,
+      y:0,
+      duration:.35,
+      stagger:.035,
+      ease:"power2.out",
+      clearProps:"transform"
+    }
+  );
+}
+
+
+/* ------------------------------------------------------------
+   VIEW TRANSITION
+   ------------------------------------------------------------ */
+
+function animateViewChange(
+  currentView,
+  nextView
+) {
+
+  if (prefersReducedMotion) {
+
+    if (currentView) {
+      currentView.classList.remove("active");
+    }
+
+    nextView.classList.add("active");
+
+    return;
+  }
+
+
+  const timeline =
+    gsap.timeline();
+
+
+  /*
+   * Fade current view out.
+   */
+
+  if (currentView) {
+
+    timeline.to(
+      currentView,
+      {
+        opacity:0,
+        x:-18,
+        duration:.2,
+        ease:"power2.in"
+      }
+    );
+
+  }
+
+
+  /*
+   * Change active view.
+   */
+
+  timeline.call(() => {
+
+    if (currentView) {
+      currentView.classList.remove("active");
+    }
+
+    nextView.classList.add("active");
+
+    gsap.set(
+      nextView,
+      {
+        opacity:0,
+        x:18
+      }
+    );
+
+  });
+
+
+  /*
+   * Animate new view in.
+   */
+
+  timeline.to(
+    nextView,
+    {
+      opacity:1,
+      x:0,
+      duration:.35,
+      ease:"power3.out"
+    }
+  );
+
+
+  /*
+   * Animate its individual fields.
+   */
+
+  timeline.call(() => {
+
+    animateActiveView();
+
+  });
+}
+
+
+/* ------------------------------------------------------------
+   INPUT FOCUS ANIMATION
+   ------------------------------------------------------------ */
+
+function setupInputAnimations() {
+
+  if (prefersReducedMotion) {
+    return;
+  }
+
+
+  const fields =
+    document.querySelectorAll(
+      "input, select, textarea"
+    );
+
+
+  fields.forEach(field => {
+
+    field.addEventListener(
+      "focus",
+      () => {
+
+        gsap.to(
+          field,
+          {
+            y:-2,
+            duration:.18,
+            ease:"power2.out"
+          }
+        );
+
+      }
+    );
+
+
+    field.addEventListener(
+      "blur",
+      () => {
+
+        gsap.to(
+          field,
+          {
+            y:0,
+            duration:.18,
+            ease:"power2.out"
+          }
+        );
+
+      }
+    );
+
+  });
+
+}
+
+
+/* ------------------------------------------------------------
+   ROLE CARD ANIMATION
+   ------------------------------------------------------------ */
+
+function setupRoleAnimations() {
+
+  if (prefersReducedMotion) {
+    return;
+  }
+
+
+  document
+    .querySelectorAll(".role-option")
+    .forEach(card => {
+
+      card.addEventListener(
+        "mouseenter",
+        () => {
+
+          gsap.to(
+            card,
+            {
+              y:-3,
+              duration:.18,
+              ease:"power2.out"
+            }
+          );
+
+        }
+      );
+
+
+      card.addEventListener(
+        "mouseleave",
+        () => {
+
+          gsap.to(
+            card,
+            {
+              y:0,
+              duration:.18,
+              ease:"power2.out"
+            }
+          );
+
+        }
+      );
+
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          gsap.fromTo(
+            card,
+            {
+              scale:.97
+            },
+            {
+              scale:1,
+              duration:.25,
+              ease:"back.out(2)"
+            }
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* ------------------------------------------------------------
+   BUTTON ANIMATION
+   ------------------------------------------------------------ */
+
+function setupButtonAnimations() {
+
+  if (prefersReducedMotion) {
+    return;
+  }
+
+
+  document
+    .querySelectorAll("button")
+    .forEach(button => {
+
+      button.addEventListener(
+        "mouseenter",
+        () => {
+
+          if (!button.disabled) {
+
+            gsap.to(
+              button,
+              {
+                y:-2,
+                duration:.18,
+                ease:"power2.out"
+              }
+            );
+
+          }
+
+        }
+      );
+
+
+      button.addEventListener(
+        "mouseleave",
+        () => {
+
+          gsap.to(
+            button,
+            {
+              y:0,
+              duration:.18,
+              ease:"power2.out"
+            }
+          );
+
+        }
+      );
+
+
+      button.addEventListener(
+        "mousedown",
+        () => {
+
+          if (!button.disabled) {
+
+            gsap.to(
+              button,
+              {
+                scale:.98,
+                duration:.08
+              }
+            );
+
+          }
+
+        }
+      );
+
+
+      button.addEventListener(
+        "mouseup",
+        () => {
+
+          gsap.to(
+            button,
+            {
+              scale:1,
+              duration:.15,
+              ease:"back.out(2)"
+            }
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+
+/* ------------------------------------------------------------
+   MESSAGE ANIMATION
+   ------------------------------------------------------------ */
+
+function animateMessage() {
+
+  if (prefersReducedMotion) {
+    return;
+  }
+
+
+  gsap.fromTo(
+    "#message",
+    {
+      opacity:0,
+      y:-10,
+      scale:.98
+    },
+    {
+      opacity:1,
+      y:0,
+      scale:1,
+      duration:.3,
+      ease:"power2.out"
+    }
+  );
+
+}
+
+
+/* ------------------------------------------------------------
+   START ANIMATIONS
+   ------------------------------------------------------------ */
+
+function initGSAPAnimations() {
+
+  if (typeof gsap === "undefined") {
+
+    console.warn(
+      "GSAP could not be loaded."
+    );
+
+    return;
+
+  }
+
+
+  animatePageIn();
+
+  setupInputAnimations();
+
+  setupRoleAnimations();
+
+  setupButtonAnimations();
+
+}
+
+
+/* ============================================================
+   END GSAP ANIMATIONS
+   ============================================================ */
+   
 </style>
 </head>
+
 <body>
+
 <aside class="panel">
+
   <div class="logo">
-    <img src="/assets/images/zbs-reversed.webp" style="max-width: 150px;">
+    <a href="/index.html">
+    <picture class="site-logo">
+      <source
+        media="(max-width: 879px)"
+        srcset="/assets/images/wasl.webp"
+      >
+    
+      <img
+        src="/assets/images/wasl-2.webp"
+        alt="Zach Workforce Solutions"
+      >
+    </picture>
+  </a>
   </div>
+
   <div>
     <h2>Your Complete Workforce Hub</h2>
-    <p>Access your schedules, manage HR tasks, and streamline workforce operations all in one secure portal.</p>
+
+    <p>
+      Access your schedules, manage HR tasks, and streamline
+      workforce operations all in one secure portal.
+    </p>
   </div>
-  <p class="quote">Having trouble logging in?
-    Contact our IT Helpdesk at support@zachworkforce.com</p>
+
+  <p class="quote">
+    Having trouble logging in?
+    Contact our IT Helpdesk at support@wasl-ss.com
+  </p>
+
 </aside>
+
+
 <main class="form-side">
-  <form class="form-box" onsubmit="event.preventDefault()">
-    <h1>Welcome back</h1>
-    <p>Sign in to continue to your workspace.</p>
-    <label for="email">Email address</label>
-    <input type="email" id="email" autocomplete="email" placeholder="you@company.com" required>
-    <label for="password">Password</label>
-    <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" required>
-    <div class="row">
-      <label><input type="checkbox"> Remember me</label>
-      <a href="#">Forgot password?</a>
+  <main class="form-side">
+
+    <div class="mobile-logo">
+      <a href="/index.html">
+      <img
+        src="/assets/images/wasl.webp"
+        alt="Zach Workforce Solutions"
+      >
+      </a>
     </div>
-    <button type="submit">Sign in</button>
-    <p class="signup">New here? <a href="#">Create an account</a></p>
-  </form>
+  
+    <div class="form-box">
+
+<div class="form-box">
+
+  <!-- ======================================================
+       GLOBAL MESSAGE
+       ====================================================== -->
+
+  <div id="message" class="message"></div>
+
+
+  <!-- ======================================================
+       LOGIN
+       ====================================================== -->
+
+  <section id="loginView" class="form-view active">
+
+    <h1>Welcome back</h1>
+
+    <p>
+      Sign in to continue to your workspace.
+    </p>
+
+    <form id="loginForm">
+
+      <label for="loginEmail">
+        Email address
+      </label>
+
+      <input
+        type="email"
+        id="loginEmail"
+        autocomplete="email"
+        placeholder="you@company.com"
+        required
+      >
+
+      <label for="loginPassword">
+        Password
+      </label>
+
+      <input
+        type="password"
+        id="loginPassword"
+        autocomplete="current-password"
+        placeholder="••••••••"
+        required
+      >
+
+      <div class="row">
+
+        <label>
+          <input
+            type="checkbox"
+            id="rememberMe"
+          >
+          Remember me
+        </label>
+
+        <a href="#" id="forgotPasswordLink">
+          Forgot password?
+        </a>
+
+      </div>
+
+      <button type="submit" id="loginButton">
+        Sign in
+      </button>
+
+    </form>
+
+    <p class="signup">
+      New here?
+      <a href="#" id="showRegister">
+        Create an account
+      </a>
+    </p>
+
+  </section>
+
+
+  <!-- ======================================================
+       REGISTRATION
+       ====================================================== -->
+
+  <section id="registerView" class="form-view">
+
+    <a href="#" class="back-link" id="backToLogin">
+      ← Back to sign in
+    </a>
+
+    <h1>Create your account</h1>
+
+    <p>
+      Register for the Zach Workforce platform.
+    </p>
+
+
+    <!-- ROLE -->
+
+    <div class="section-title">
+      I am registering as
+    </div>
+
+    <div class="role-selector">
+
+      <div
+        class="role-option selected"
+        data-role="worker"
+        id="workerRole"
+      >
+        <strong>Worker</strong>
+        <span>Find work and manage your profile</span>
+      </div>
+
+      <div
+        class="role-option"
+        data-role="client"
+        id="clientRole"
+      >
+        <strong>Client</strong>
+        <span>Hire and manage workforce</span>
+      </div>
+
+    </div>
+
+
+    <form id="registerForm">
+
+      <!-- PERSONAL INFORMATION -->
+
+      <div class="section-title">
+        Personal information
+      </div>
+
+      <div class="form-grid">
+
+        <div>
+          <label for="firstName">
+            First name
+          </label>
+
+          <input
+            type="text"
+            id="firstName"
+            autocomplete="given-name"
+            required
+          >
+        </div>
+
+        <div>
+          <label for="lastName">
+            Last name
+          </label>
+
+          <input
+            type="text"
+            id="lastName"
+            autocomplete="family-name"
+            required
+          >
+        </div>
+
+        <div>
+          <label for="phone">
+            Phone
+          </label>
+
+          <input
+            type="tel"
+            id="phone"
+            autocomplete="tel"
+            placeholder="+211..."
+          >
+        </div>
+
+        <div>
+          <label for="registerEmail">
+            Email address
+          </label>
+
+          <input
+            type="email"
+            id="registerEmail"
+            autocomplete="email"
+            placeholder="you@company.com"
+            required
+          >
+        </div>
+
+      </div>
+
+
+      <!-- WORKER FIELDS -->
+
+      <div id="workerFields">
+
+        <div class="section-title">
+          Worker information
+        </div>
+      
+        <label for="profession">
+          Profession
+        </label>
+      
+        <select id="profession" required>
+          <option value="">
+            Select your profession
+          </option>
+        </select>
+      
+        <div class="form-grid">
+      
+          <div>
+            <label for="yearsExperience">
+              Years of experience
+            </label>
+      
+            <input
+              type="number"
+              id="yearsExperience"
+              min="0"
+              step="0.5"
+              placeholder="e.g. 3"
+            >
+          </div>
+      
+          <div>
+            <label for="location">
+              Primary location
+            </label>
+      
+            <input
+              type="text"
+              id="location"
+              placeholder="e.g. Juba"
+            >
+          </div>
+      
+        </div>
+      
+        <label for="bio">
+          Short professional bio
+        </label>
+      
+        <textarea
+          id="bio"
+          placeholder="Tell employers briefly about your experience..."
+        ></textarea>
+      
+        <label for="cv">
+          CV / Resume
+          <span style="font-weight:400;color:#6b7280;">
+            (optional)
+          </span>
+        </label>
+      
+        <input
+          type="file"
+          id="cv"
+          accept="application/pdf,.pdf"
+        >
+      
+        <p style="
+          margin-top:-10px;
+          margin-bottom:18px;
+          color:#6b7280;
+          font-size:.78rem;
+        ">
+          PDF only. You can add or update your CV later from your profile.
+        </p>
+      
+      </div>
+
+      <!-- PASSWORD -->
+
+      <div class="section-title">
+        Security
+      </div>
+
+      <label for="registerPassword">
+        Password
+      </label>
+
+      <input
+        type="password"
+        id="registerPassword"
+        autocomplete="new-password"
+        placeholder="At least 8 characters"
+        minlength="8"
+        required
+      >
+
+      <label for="confirmPassword">
+        Confirm password
+      </label>
+
+      <input
+        type="password"
+        id="confirmPassword"
+        autocomplete="new-password"
+        placeholder="Repeat your password"
+        minlength="8"
+        required
+      >
+
+      <button type="submit" id="registerButton">
+        Create account
+      </button>
+
+    </form>
+
+    <p class="login-link">
+      Already have an account?
+      <a href="#" id="showLogin">
+        Sign in
+      </a>
+    </p>
+
+  </section>
+
+
+  <!-- ======================================================
+       FORGOT PASSWORD
+       ====================================================== -->
+
+  <section id="forgotView" class="form-view">
+
+    <a href="#" class="back-link" id="forgotBack">
+      ← Back to sign in
+    </a>
+
+    <h1>Reset your password</h1>
+
+    <p>
+      Enter your email and we'll send you a password reset link.
+    </p>
+
+    <form id="forgotForm">
+
+      <label for="forgotEmail">
+        Email address
+      </label>
+
+      <input
+        type="email"
+        id="forgotEmail"
+        autocomplete="email"
+        placeholder="you@company.com"
+        required
+      >
+
+      <button type="submit" id="forgotButton">
+        Send reset link
+      </button>
+
+    </form>
+
+  </section>
+
+
+  <!-- ======================================================
+       UPDATE PASSWORD
+       ====================================================== -->
+
+  <section id="updatePasswordView" class="form-view">
+
+    <h1>Set a new password</h1>
+
+    <p>
+      Choose a new password for your account.
+    </p>
+
+    <form id="updatePasswordForm">
+
+      <label for="newPassword">
+        New password
+      </label>
+
+      <input
+        type="password"
+        id="newPassword"
+        minlength="8"
+        autocomplete="new-password"
+        required
+      >
+
+      <label for="newPasswordConfirm">
+        Confirm password
+      </label>
+
+      <input
+        type="password"
+        id="newPasswordConfirm"
+        minlength="8"
+        autocomplete="new-password"
+        required
+      >
+
+      <button type="submit" id="updatePasswordButton">
+        Update password
+      </button>
+
+    </form>
+
+  </section>
+
+</div>
+
 </main>
-</body>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/gsap-public/minified/gsap.min.js"></script>
+
+<script>
+
+/* ============================================================
+   SUPABASE CONFIGURATION
+   ============================================================
+
+   IMPORTANT:
+   Use your PUBLIC anon/publishable key here.
+
+   NEVER put the service_role key in this file.
+   ============================================================ */
+
+const SUPABASE_URL = "https://hhpyomxwaexviyxwcojr.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhocHlvbXh3YWV4dml5eHdjb2pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNzM2MzcsImV4cCI6MjEwNTg0OTYzN30.rZ890-_6SQTocIvz-VBNericambE-PHvYSzCNfXb0uQ";
+
+
+const { createClient } =
+  supabase;
+
+const db =
+  createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* ============================================================
+   DOM
+   ============================================================ */
+
+const message =
+  document.getElementById("message");
+
+const loginView =
+  document.getElementById("loginView");
+
+const registerView =
+  document.getElementById("registerView");
+
+const forgotView =
+  document.getElementById("forgotView");
+
+const updatePasswordView =
+  document.getElementById("updatePasswordView");
+
+const workerFields =
+  document.getElementById("workerFields");
+
+const clientFields =
+  document.getElementById("clientFields");
+
+const workerRole =
+  document.getElementById("workerRole");
+
+const clientRole =
+  document.getElementById("clientRole");
+
+let selectedRole = "worker";
+
+const prefersReducedMotion =
+  window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+/* ============================================================
+   MESSAGE HELPERS
+   ============================================================ */
+
+function showMessage(text, type = "error") {
+
+  message.textContent = text;
+
+  message.className =
+    "message show " + type;
+}
+
+
+function clearMessage() {
+
+  message.textContent = "";
+
+  message.className =
+    "message";
+}
+
+
+/* ============================================================
+   VIEW MANAGEMENT
+   ============================================================ */
+
+   function showView(view) {
+
+[
+  loginView,
+  registerView,
+  forgotView,
+  updatePasswordView
+].forEach(section => {
+
+  section.classList.remove("active");
+
+});
+
+view.classList.add("active");
+
+clearMessage();
+
+window.scrollTo({
+  top: 0,
+  behavior: "smooth"
+});
+
+/*
+ * Animate the newly displayed view.
+ */
+
+if (
+  typeof gsap !== "undefined" &&
+  !prefersReducedMotion
+) {
+
+  gsap.fromTo(
+    view,
+    {
+      opacity: 0,
+      x: 20
+    },
+    {
+      opacity: 1,
+      x: 0,
+      duration: 0.35,
+      ease: "power3.out",
+      clearProps: "transform"
+    }
+  );
+
+}
+
+}
+
+
+/* ============================================================
+   ROLE SELECTION
+   ============================================================ */
+
+function selectRole(role) {
+
+  selectedRole = role;
+
+  workerRole.classList.toggle(
+    "selected",
+    role === "worker"
+  );
+
+  clientRole.classList.toggle(
+    "selected",
+    role === "client"
+  );
+
+  workerFields.classList.toggle(
+    "hidden",
+    role !== "worker"
+  );
+
+  clientFields.classList.toggle(
+    "hidden",
+    role !== "client"
+  );
+
+  document
+    .getElementById("profession")
+    .required = role === "worker";
+
+  document
+    .getElementById("organizationName")
+    .required = role === "client";
+}
+
+
+workerRole.addEventListener(
+  "click",
+  () => selectRole("worker")
+);
+
+clientRole.addEventListener(
+  "click",
+  () => selectRole("client")
+);
+
+
+/* ============================================================
+   LOAD PROFESSIONS
+   ============================================================ */
+
+   async function loadProfessions() {
+  const select = document.getElementById("profession");
+
+  if (!select) {
+    console.error("Profession select element not found.");
+    return;
+  }
+
+  select.innerHTML = `<option value="">Loading professions...</option>`;
+
+  try {
+    const { data, error } = await db
+      .from("professions")
+      .select("id, name")
+      .eq("is_active", true)
+      .order("name", { ascending: true });
+
+    console.log("Professions response:", { data, error });
+
+    if (error) {
+      console.error("Profession loading error:", error);
+
+      select.innerHTML =
+        `<option value="">Unable to load professions</option>`;
+
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      select.innerHTML =
+        `<option value="">No professions available</option>`;
+
+      return;
+    }
+
+    select.innerHTML =
+      `<option value="">Select your profession</option>` +
+      data.map(profession =>
+        `<option value="${profession.id}">
+          ${profession.name}
+        </option>`
+      ).join("");
+
+  } catch (err) {
+    console.error("Unexpected profession error:", err);
+
+    select.innerHTML =
+      `<option value="">Unable to load professions</option>`;
+  }
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+
+document
+  .getElementById("loginForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    clearMessage();
+
+    const button =
+      document.getElementById("loginButton");
+
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
+
+    const remember =
+      document
+        .getElementById("rememberMe")
+        .checked;
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Signing in...";
+
+
+    try {
+
+      /*
+       * Supabase JS stores the session in local storage
+       * by default. This keeps the user signed in.
+       *
+       * The remember checkbox is retained in the UI for
+       * your desired UX, but Supabase's normal browser
+       * session persistence remains enabled.
+       */
+
+      const { data, error } =
+        await db.auth.signInWithPassword({
+          email,
+          password
+        });
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      if (!data.user) {
+        throw new Error(
+          "Unable to sign in."
+        );
+      }
+
+
+      await handleAuthenticatedUser(
+        data.user
+      );
+
+    }
+    catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        getAuthError(error),
+        "error"
+      );
+
+      button.disabled = false;
+
+      button.textContent =
+        "Sign in";
+    }
+
+  });
+
+
+/* ============================================================
+   AFTER LOGIN
+   ============================================================ */
+
+async function handleAuthenticatedUser(user) {
+
+  /*
+   * Get the application profile.
+   */
+
+  const { data: profile, error: profileError } =
+    await db
+      .from("profiles")
+      .select("id,first_name,last_name,status")
+      .eq("id", user.id)
+      .maybeSingle();
+
+
+  if (profileError) {
+    throw profileError;
+  }
+
+
+  if (!profile) {
+
+    throw new Error(
+      "Your account profile could not be found."
+    );
+
+  }
+
+
+  /*
+   * Application-level account status.
+   */
+
+  if (profile.status === "suspended") {
+
+    await db.auth.signOut();
+
+    throw new Error(
+      "Your account has been suspended. Please contact the Zach Workforce support team."
+    );
+
+  }
+
+
+  if (profile.status === "inactive") {
+
+    await db.auth.signOut();
+
+    throw new Error(
+      "Your account is inactive. Please contact the Zach Workforce support team."
+    );
+
+  }
+
+
+  /*
+   * Get user's roles.
+   */
+
+  const { data: roles, error: roleError } =
+    await db
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id);
+
+
+  if (roleError) {
+    throw roleError;
+  }
+
+
+  if (!roles || roles.length === 0) {
+
+    throw new Error(
+      "Your account does not have an assigned role yet."
+    );
+
+  }
+
+
+  /*
+   * Pick the first role for now.
+   *
+   * Later, if users can have multiple roles,
+   * you can build a role-selection screen.
+   */
+
+  const role =
+    roles[0].role;
+
+
+  /*
+   * Pending accounts can authenticate but should
+   * not necessarily enter the workspace.
+   *
+   * Change this behavior if your business process
+   * allows pending users to access a limited dashboard.
+   */
+
+  if (profile.status === "pending") {
+
+    /*
+     * For now we allow login to continue.
+     *
+     * If you want admin approval before access,
+     * uncomment the following:
+     *
+     * await db.auth.signOut();
+     * throw new Error(
+     *   "Your account is awaiting approval."
+     * );
+     */
+
+  }
+
+
+  redirectByRole(role);
+
+}
+
+
+/* ============================================================
+   ROLE REDIRECTION
+   ============================================================ */
+
+function redirectByRole(role) {
+
+  const destinations = {
+
+    worker:
+      "/worker/dashboard.html",
+
+    client:
+      "/client/dashboard.html",
+
+    admin:
+      "/admin/dashboard.html",
+
+    recruiter:
+      "/recruiter/dashboard.html",
+
+    trainer:
+      "/trainer/dashboard.html",
+
+    finance:
+      "/finance/dashboard.html",
+
+    supervisor:
+      "/supervisor/dashboard.html",
+
+    manager:
+      "/manager/dashboard.html"
+
+  };
+
+
+  const destination =
+    destinations[role];
+
+
+  if (!destination) {
+
+    throw new Error(
+      "No dashboard is configured for your account role."
+    );
+
+  }
+
+
+  window.location.href =
+    destination;
+}
+
+
+/* ============================================================
+   REGISTRATION
+   ============================================================ */
+
+document
+  .getElementById("registerForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    clearMessage();
+
+    const button =
+      document.getElementById("registerButton");
+
+    const firstName =
+      document
+        .getElementById("firstName")
+        .value
+        .trim();
+
+    const lastName =
+      document
+        .getElementById("lastName")
+        .value
+        .trim();
+
+    const phone =
+      document
+        .getElementById("phone")
+        .value
+        .trim();
+
+    const email =
+      document
+        .getElementById("registerEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("registerPassword")
+        .value;
+
+    const confirmPassword =
+      document
+        .getElementById("confirmPassword")
+        .value;
+
+
+    if (password.length < 8) {
+
+      showMessage(
+        "Password must contain at least 8 characters.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (password !== confirmPassword) {
+
+      showMessage(
+        "Passwords do not match.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    /*
+     * Build metadata.
+     *
+     * The database trigger uses this metadata to
+     * create the application records.
+     */
+
+    const metadata = {
+
+      first_name:
+        firstName,
+
+      last_name:
+        lastName,
+
+      phone:
+        phone,
+
+      role:
+        selectedRole
+
+    };
+
+
+    /* --------------------------------------------------------
+       WORKER METADATA
+       -------------------------------------------------------- */
+
+    if (selectedRole === "worker") {
+
+      const profession =
+        document
+          .getElementById("profession")
+          .value;
+
+      if (!profession) {
+
+        showMessage(
+          "Please select your profession.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      metadata.profession_id =
+        profession;
+
+      metadata.years_experience =
+        document
+          .getElementById("yearsExperience")
+          .value;
+
+
+      metadata.primary_location =
+        document
+          .getElementById("location")
+          .value
+          .trim();
+
+      metadata.bio =
+        document
+          .getElementById("bio")
+          .value
+          .trim();
+
+    }
+
+
+    /* --------------------------------------------------------
+       CLIENT METADATA
+       -------------------------------------------------------- */
+
+    if (selectedRole === "client") {
+
+      const organizationName =
+        document
+          .getElementById("organizationName")
+          .value
+          .trim();
+
+      if (!organizationName) {
+
+        showMessage(
+          "Please enter your organization name.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      metadata.organization_name =
+        organizationName;
+
+      metadata.organization_type =
+        document
+          .getElementById("organizationType")
+          .value
+          .trim();
+
+      metadata.registration_number =
+        document
+          .getElementById("registrationNumber")
+          .value
+          .trim();
+
+      metadata.organization_phone =
+        document
+          .getElementById("organizationPhone")
+          .value
+          .trim();
+
+      metadata.position =
+        document
+          .getElementById("position")
+          .value
+          .trim();
+
+      metadata.organization_address =
+        document
+          .getElementById("organizationAddress")
+          .value
+          .trim();
+
+      metadata.organization_location =
+        document
+          .getElementById("organizationLocation")
+          .value
+          .trim();
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Creating account...";
+
+
+    try {
+
+      const { data, error } =
+        await db.auth.signUp({
+
+          email,
+
+          password,
+
+          options: {
+
+            data: metadata,
+
+            /*
+             * Change this URL to the actual URL
+             * where this login page is hosted.
+             */
+
+            emailRedirectTo:
+              window.location.origin +
+              window.location.pathname
+
+          }
+
+        });
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      /*
+       * If email confirmation is enabled,
+       * data.session will normally be null.
+       */
+
+      if (!data.session) {
+
+        showMessage(
+          "Account created successfully. Please check your email and click the verification link before signing in.",
+          "success"
+        );
+
+        document
+          .getElementById("loginEmail")
+          .value = email;
+
+        showView(loginView);
+
+      }
+      else {
+
+        /*
+         * If email confirmation is disabled,
+         * the user is immediately authenticated.
+         */
+
+        await handleAuthenticatedUser(
+          data.user
+        );
+
+      }
+
+    }
+    catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        getAuthError(error),
+        "error"
+      );
+
+      button.disabled = false;
+
+      button.textContent =
+        "Create account";
+    }
+
+  });
+
+
+/* ============================================================
+   FORGOT PASSWORD
+   ============================================================ */
+
+document
+  .getElementById("forgotPasswordLink")
+  .addEventListener("click", event => {
+
+    event.preventDefault();
+
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+    if (email) {
+
+      document
+        .getElementById("forgotEmail")
+        .value = email;
+
+    }
+
+    showView(forgotView);
+
+  });
+
+
+document
+  .getElementById("forgotForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    clearMessage();
+
+    const button =
+      document
+        .getElementById("forgotButton");
+
+    const email =
+      document
+        .getElementById("forgotEmail")
+        .value
+        .trim();
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Sending...";
+
+
+    try {
+
+      const { error } =
+        await db.auth.resetPasswordForEmail(
+          email,
+          {
+
+            redirectTo:
+              window.location.origin +
+              window.location.pathname
+
+          }
+        );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      showMessage(
+        "If an account exists for that email, a password reset link has been sent.",
+        "success"
+      );
+
+    }
+    catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        getAuthError(error),
+        "error"
+      );
+
+    }
+    finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "Send reset link";
+
+    }
+
+  });
+
+
+/* ============================================================
+   PASSWORD UPDATE
+   ============================================================ */
+
+document
+  .getElementById("updatePasswordForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    clearMessage();
+
+    const button =
+      document
+        .getElementById("updatePasswordButton");
+
+    const password =
+      document
+        .getElementById("newPassword")
+        .value;
+
+    const confirm =
+      document
+        .getElementById("newPasswordConfirm")
+        .value;
+
+
+    if (password.length < 8) {
+
+      showMessage(
+        "Password must contain at least 8 characters.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (password !== confirm) {
+
+      showMessage(
+        "Passwords do not match.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Updating...";
+
+
+    try {
+
+      const { error } =
+        await db.auth.updateUser({
+          password
+        });
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      showMessage(
+        "Your password has been updated. You can now sign in with your new password.",
+        "success"
+      );
+
+
+      setTimeout(() => {
+
+        showView(loginView);
+
+      }, 1500);
+
+    }
+    catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        getAuthError(error),
+        "error"
+      );
+
+    }
+    finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "Update password";
+
+    }
+
+  });
+
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
+document
+  .getElementById("showRegister")
+  .addEventListener("click", event => {
+
+    event.preventDefault();
+
+    showView(registerView);
+
+  });
+
+
+document
+  .getElementById("showLogin")
+  .addEventListener("click", event => {
+
+    event.preventDefault();
+
+    showView(loginView);
+
+  });
+
+
+document
+  .getElementById("backToLogin")
+  .addEventListener("click", event => {
+
+    event.preventDefault();
+
+    showView(loginView);
+
+  });
+
+
+document
+  .getElementById("forgotBack")
+  .addEventListener("click", event => {
+
+    event.preventDefault();
+
+    showView(loginView);
+
+  });
+
+
+/* ============================================================
+   AUTH STATE
+   ============================================================ */
+
+db.auth.onAuthStateChange(
+  async (event, session) => {
+
+    console.log(
+      "Auth event:",
+      event
+    );
+
+
+    /*
+     * PASSWORD_RECOVERY is fired when the user
+     * arrives from the reset-password link.
+     */
+
+    if (event === "PASSWORD_RECOVERY") {
+
+      showView(updatePasswordView);
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   AUTH ERROR TRANSLATION
+   ============================================================ */
+
+function getAuthError(error) {
+
+  const message =
+    error?.message || "";
+
+
+  const lower =
+    message.toLowerCase();
+
+
+  if (
+    lower.includes("invalid login credentials")
+  ) {
+
+    return "The email or password is incorrect.";
+
+  }
+
+
+  if (
+    lower.includes("email not confirmed")
+  ) {
+
+    return "Please verify your email address before signing in.";
+
+  }
+
+
+  if (
+    lower.includes("user already registered")
+  ) {
+
+    return "An account with this email already exists.";
+
+  }
+
+
+  if (
+    lower.includes("password should be at least")
+  ) {
+
+    return "Your password does not meet the minimum security requirements.";
+
+  }
+
+
+  if (
+    lower.includes("rate limit")
+  ) {
+
+    return "Too many attempts. Please wait a moment and try again.";
+
+  }
+
+
+  return message ||
+    "Something went wrong. Please try again.";
+
+}
+
+
+/* ============================================================
+   INITIALIZATION
+   ============================================================ */
+
+async function init() {
+
+  /*
+   * Load professions for worker registration.
+   */
+
+  await loadProfessions();
+
+
+  /*
+   * Check whether the browser already has
+   * an authenticated Supabase session.
+   */
+
+  const {
+    data: {
+      session
+    }
+  } = await db.auth.getSession();
+
+
+  if (session?.user) {
+
+    try {
+
+      await handleAuthenticatedUser(
+        session.user
+      );
+
+    }
+    catch (error) {
+
+      console.error(error);
+
+      /*
+       * Do not automatically redirect if something
+       * is wrong with the application profile.
+       */
+
+      showView(loginView);
+
+      showMessage(
+        error.message,
+        "error"
+      );
+
+    }
+
+  }
+
+}
+
+
+init();
+
+
+
+</script>
+
+</body>
 </html>

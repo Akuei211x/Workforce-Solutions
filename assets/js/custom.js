@@ -232,3 +232,614 @@ document.querySelectorAll(".item").forEach((item) => {
     });
   });
 });
+/* =========================================================
+   WASL STORY ANIMATIONS
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  if (typeof gsap === "undefined") return;
+
+  gsap.registerPlugin(ScrollTrigger);
+
+
+  /* -----------------------------------------
+     What Is Wasl
+  ----------------------------------------- */
+
+  const storySection = document.querySelector(".wasl-story");
+
+  if (storySection) {
+
+    const storyCards = storySection.querySelectorAll(".story-card");
+    const storyContent = storySection.querySelector(".wasl-story-content");
+    const storyGlow = storySection.querySelector(".story-glow");
+    const storyCircle = storySection.querySelector(".story-circle");
+
+    gsap.from(storyCards, {
+      scrollTrigger: {
+        trigger: storySection,
+        start: "top 75%",
+        toggleActions: "play none none reverse"
+      },
+      y: 80,
+      opacity: 0,
+      rotate: 3,
+      duration: 1,
+      stagger: 0.18,
+      ease: "power3.out"
+    });
+
+    gsap.from(storyContent.children, {
+      scrollTrigger: {
+        trigger: storyContent,
+        start: "top 78%",
+        toggleActions: "play none none reverse"
+      },
+      y: 35,
+      opacity: 0,
+      duration: .8,
+      stagger: .1,
+      ease: "power3.out"
+    });
+
+    gsap.from(storyCircle, {
+      scrollTrigger: {
+        trigger: storySection,
+        start: "top 75%"
+      },
+      scale: 0,
+      rotation: -90,
+      duration: 1,
+      delay: .3,
+      ease: "back.out(1.7)"
+    });
+
+    /* Slow floating animation */
+
+    gsap.to(storyCards[0], {
+      y: -12,
+      duration: 2.8,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    gsap.to(storyCards[1], {
+      y: 10,
+      duration: 3.2,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    gsap.to(storyCircle, {
+      y: -8,
+      duration: 2.5,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    /* Subtle glow movement */
+
+    gsap.to(storyGlow, {
+      scale: 1.15,
+      opacity: .7,
+      duration: 3,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+  }
+
+
+  /* -----------------------------------------
+     Who We Are
+  ----------------------------------------- */
+
+  const teamSection = document.querySelector(".wasl-team");
+
+  if (teamSection) {
+
+    const heading = teamSection.querySelector(".team-heading");
+    const cards = teamSection.querySelectorAll(".value-card");
+
+    gsap.from(heading, {
+      scrollTrigger: {
+        trigger: teamSection,
+        start: "top 75%",
+        toggleActions: "play none none reverse"
+      },
+      x: -60,
+      opacity: 0,
+      duration: 1,
+      ease: "power3.out"
+    });
+
+    gsap.from(cards, {
+      scrollTrigger: {
+        trigger: teamSection,
+        start: "top 70%",
+        toggleActions: "play none none reverse"
+      },
+      x: 70,
+      opacity: 0,
+      duration: .8,
+      stagger: .15,
+      ease: "power3.out"
+    });
+
+
+    /* Card hover animation */
+
+    cards.forEach(card => {
+
+      const icon = card.querySelector(".value-icon");
+      const arrow = card.querySelector(".value-arrow");
+
+      card.addEventListener("mouseenter", () => {
+
+        gsap.to(icon, {
+          scale: 1.12,
+          rotate: 5,
+          duration: .25,
+          ease: "power2.out"
+        });
+
+        gsap.to(arrow, {
+          x: 5,
+          duration: .25,
+          ease: "power2.out"
+        });
+
+      });
+
+      card.addEventListener("mouseleave", () => {
+
+        gsap.to(icon, {
+          scale: 1,
+          rotate: 0,
+          duration: .25,
+          ease: "power2.out"
+        });
+
+        gsap.to(arrow, {
+          x: 0,
+          duration: .25,
+          ease: "power2.out"
+        });
+
+      });
+
+    });
+
+  }
+
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ================================
+     WASL STORY CARDS
+  ================================= */
+
+  const storyCards = gsap.utils.toArray(".value-card");
+
+  if (storyCards.length) {
+
+    // Initial state
+    gsap.set(storyCards, {
+      opacity: 0,
+      y: 45
+    });
+
+    // Reveal cards on scroll
+    gsap.to(storyCards, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      stagger: 0.18,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".wasl-values",
+        start: "top 75%",
+        once: true
+      }
+    });
+
+    // Card hover interaction
+    storyCards.forEach((card) => {
+
+      const icon = card.querySelector(".value-icon");
+      const arrow = card.querySelector(".value-arrow");
+
+      card.addEventListener("mouseenter", () => {
+
+        gsap.to(card, {
+          y: -6,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+
+        if (icon) {
+          gsap.to(icon, {
+            scale: 1.08,
+            rotate: 4,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        }
+
+        if (arrow) {
+          gsap.to(arrow, {
+            x: 5,
+            duration: 0.25,
+            ease: "power2.out"
+          });
+        }
+
+      });
+
+      card.addEventListener("mouseleave", () => {
+
+        gsap.to(card, {
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+
+        if (icon) {
+          gsap.to(icon, {
+            scale: 1,
+            rotate: 0,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        }
+
+        if (arrow) {
+          gsap.to(arrow, {
+            x: 0,
+            duration: 0.25,
+            ease: "power2.out"
+          });
+        }
+
+      });
+
+    });
+
+  }
+
+
+  /* ================================
+     STORY HEADING
+  ================================= */
+
+  const teamHeading = document.querySelector(".team-heading");
+
+  if (teamHeading) {
+
+    gsap.from(teamHeading.children, {
+      opacity: 0,
+      y: 25,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".wasl-team",
+        start: "top 75%",
+        once: true
+      }
+    });
+
+  }
+
+});
+/* =====================================
+    HOW IT WORKS
+======================================== */
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* =========================================
+     HOW IT WORKS
+  ========================================= */
+
+  const howSection = document.querySelector(".wasl-how");
+
+  if (howSection) {
+
+    const steps = gsap.utils.toArray(".process-step");
+    const progress = document.querySelector(".process-line-progress");
+
+    // Initial state
+    gsap.set(steps, {
+      opacity: 0,
+      y: 35
+    });
+
+    gsap.set(".process-marker", {
+      scale: 0.7
+    });
+
+    // Main timeline
+    const howTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".wasl-process",
+        start: "top 75%",
+        once: true
+      }
+    });
+
+    // Draw connecting line
+    howTimeline.to(progress, {
+      width: "100%",
+      duration: 1.2,
+      ease: "power2.inOut"
+    });
+
+    // Reveal steps
+    howTimeline.to(steps, {
+      opacity: 1,
+      y: 0,
+      duration: 0.65,
+      stagger: 0.2,
+      ease: "power3.out"
+    }, "-=0.8");
+
+    // Pop the markers
+    howTimeline.to(".process-marker", {
+      scale: 1,
+      duration: 0.5,
+      stagger: 0.2,
+      ease: "back.out(1.7)"
+    }, "-=0.9");
+
+
+    /* -----------------------------------------
+       Active step
+    ----------------------------------------- */
+
+    steps.forEach((step, index) => {
+
+      step.addEventListener("mouseenter", () => {
+
+        steps.forEach(item => {
+          item.classList.remove("active");
+        });
+
+        step.classList.add("active");
+
+      });
+
+    });
+
+
+    /* -----------------------------------------
+       Reset active state
+    ----------------------------------------- */
+
+    const process = document.querySelector(".wasl-process");
+
+    process.addEventListener("mouseleave", () => {
+
+      steps.forEach(item => {
+        item.classList.remove("active");
+      });
+
+    });
+
+  }
+
+});
+gsap.from(".wasl-cta-content > *", {
+  scrollTrigger: {
+    trigger: ".wasl-cta",
+    start: "top 80%"
+  },
+  y: 30,
+  opacity: 0,
+  duration: 0.8,
+  stagger: 0.12,
+  ease: "power3.out"
+});
+
+gsap.from(".wasl-cta-card", {
+  scrollTrigger: {
+    trigger: ".wasl-cta-actions",
+    start: "top 85%"
+  },
+  y: 35,
+  opacity: 0,
+  duration: 0.7,
+  stagger: 0.15,
+  ease: "power3.out"
+});
+
+gsap.to(".wasl-cta-glow", {
+  y: 30,
+  x: -20,
+  duration: 4,
+  repeat: -1,
+  yoyo: true,
+  ease: "sine.inOut"
+});
+/* =========================
+   WASL INDUSTRIES GSAP
+========================= */
+
+gsap.registerPlugin(ScrollTrigger);
+
+
+/* Heading reveal */
+
+gsap.from(".industries-heading-main > *", {
+  scrollTrigger: {
+    trigger: ".wasl-industries",
+    start: "top 80%",
+    once: true
+  },
+
+  y: 35,
+  opacity: 0,
+
+  duration: 0.8,
+  stagger: 0.12,
+
+  ease: "power3.out"
+});
+
+
+/* Description */
+
+gsap.from(".industries-heading > p", {
+  scrollTrigger: {
+    trigger: ".wasl-industries",
+    start: "top 80%",
+    once: true
+  },
+
+  y: 25,
+  opacity: 0,
+
+  duration: 0.8,
+
+  delay: 0.15,
+
+  ease: "power3.out"
+});
+
+
+/* Cards */
+
+gsap.from(".industry-card", {
+  scrollTrigger: {
+    trigger: ".industries-grid",
+    start: "top 82%",
+    once: true
+  },
+
+  y: 50,
+  opacity: 0,
+  scale: 0.97,
+
+  duration: 0.8,
+
+  stagger: 0.12,
+
+  ease: "power3.out"
+});
+
+
+/* Subtle image movement while scrolling */
+
+document.querySelectorAll(".industry-card").forEach((card) => {
+
+  const image = card.querySelector(".industry-image img");
+
+  gsap.to(image, {
+    yPercent: -5,
+
+    ease: "none",
+
+    scrollTrigger: {
+      trigger: card,
+
+      start: "top bottom",
+      end: "bottom top",
+
+      scrub: 1
+    }
+  });
+
+});
+/* Contact Form */
+/* =========================
+   WASL CONTACT GSAP
+========================= */
+
+gsap.registerPlugin(ScrollTrigger);
+
+
+/* Left content */
+
+gsap.from(".wasl-contact-left > *", {
+  scrollTrigger: {
+    trigger: ".wasl-contact",
+    start: "top 80%",
+    once: true
+  },
+
+  y: 35,
+  opacity: 0,
+
+  duration: 0.8,
+  stagger: 0.12,
+
+  ease: "power3.out"
+});
+
+
+/* Contact details */
+
+gsap.from(".contact-detail", {
+  scrollTrigger: {
+    trigger: ".contact-details",
+    start: "top 85%",
+    once: true
+  },
+
+  x: -25,
+  opacity: 0,
+
+  duration: 0.7,
+  stagger: 0.12,
+
+  ease: "power3.out"
+});
+
+
+/* Form */
+
+gsap.from(".wasl-contact-right", {
+  scrollTrigger: {
+    trigger: ".wasl-contact-right",
+    start: "top 82%",
+    once: true
+  },
+
+  y: 45,
+  opacity: 0,
+
+  duration: 0.9,
+
+  ease: "power3.out"
+});
+
+
+/* Form fields */
+
+gsap.from(".contact-field", {
+  scrollTrigger: {
+    trigger: ".wasl-contact-right",
+    start: "top 75%",
+    once: true
+  },
+
+  y: 15,
+  opacity: 0,
+
+  duration: 0.5,
+  stagger: 0.08,
+
+  delay: 0.2,
+
+  ease: "power2.out"
+});
